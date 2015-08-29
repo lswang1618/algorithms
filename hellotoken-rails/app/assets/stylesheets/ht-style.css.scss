@@ -1,0 +1,657 @@
+/* ----- Fonts ----- */
+/*
+@font-face {
+  font-family: 'HelveticaNeueBlack';
+  src: url("HelveticaNeueLTPro-Blk.otf") format("opentype");
+}
+*/
+@font-face {
+  font-family: 'Modum';
+  src: asset-url("fonts/modum.otf") format("opentype");
+}
+
+@font-face {
+  font-family: 'GloberBold';
+  src: asset-url("fonts/glober_bold.otf") format("opentype");
+}
+
+/* ---- Styles ----- */
+
+.EIEO {
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+
+/* CSS RESET */
+#ht-dialog, #ht-dialog *, #ht-timer, #ht-timer * {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    line-height: 1;
+}
+
+#ht-dialog a, #ht-timer a {
+    background: transparent;
+}
+
+#ht-dialog a:focus, #ht-timer a:focus {
+    outline: thin dotted;
+}
+
+#ht-dialog a:active, #ht-timer a:active,
+#ht-dialog a:hover, #ht-timer a:hover {
+    outline: 0;
+}
+
+#ht-dialog b, #ht-timer b,
+#ht-dialog strong, #ht-timer strong {
+    font-weight: bold;
+}
+
+#ht-dialog dfn, #ht-timer dfn {
+    font-style: italic;
+}
+
+#ht-dialog img, #ht-timer img {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/* --------- */
+
+
+#ht-grayOut {
+    height: 100%;
+    width: 100%;
+
+    opacity: 0.6;
+
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+
+    z-index: 499;
+    /* display: none; */
+}
+
+#ht-dialog {
+    background: #eceef1;
+
+    border: 1px solid #868686;
+    border-radius: 5px;
+
+    position: fixed;
+    width: 550px;
+    min-height: 460px;
+    height: auto;
+    top: 35%;
+    left: 50%;
+    margin-top: -235px;
+    margin-left: -280px;
+
+    z-index: 500;
+
+    font-family: 'Modum','HelveticaNeue', 'Open Sans', sans-serif;
+
+    /* display: none; */
+}
+
+#ht-dialog > .ht-relativeWrap {
+    position: relative;
+
+    padding: 0;
+}
+
+#ht-dialog .ht-relativeWrap > .close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+
+    height: 12px;
+    width: 12px;
+
+    background-image:asset-url('btn-close.png');
+
+    cursor: pointer;
+
+    opacity: 0.5;
+}
+
+#ht-dialog .ht-relativeWrap > .close:hover {
+    opacity: 1;
+}
+
+#ht-dialog .ht-content > .ht-header {
+    background: white;
+	height: 150px;
+    padding: 30px 0;
+    border-radius: 5px 5px 0 0;
+
+    text-align: center;
+
+    border-bottom: 1px solid #ccd0d5;
+}
+
+#ht-dialog .ht-header > h4 {
+    margin-top: 5px;
+    margin-bottom: 15px;
+
+    font-style: italic;
+    font-size: 18px;
+
+    text-align: center;
+
+    display: none;
+}
+
+.ht-logo-small{
+    height: 75px;
+    width: 75px;
+
+    // background-image: asset-url('ht_logo_small.png');
+
+    margin: 0 auto 15px auto;
+}
+
+#ht-token-container-popup {
+  height:95px;
+  width:75px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+#ht-bounce-1{
+	-webkit-animation: token 3s infinite;
+	animation: token 3s infinite;
+}
+
+@-webkit-keyframes token {
+	0% {
+		height:10px;
+	}
+	10% {
+		height:0px;
+	}
+	20% {
+		height:10px;
+	}
+	100% {
+		height:10px;
+	}
+}
+
+@keyframes token {
+	0% {
+		height:10px;
+	}
+	10% {
+		height:0px;
+	}
+	20% {
+		height:10px;
+	}
+	100% {
+		height:10px;
+	}
+}
+
+#ht-dialog .ht-header .ht-img-logo {
+    width: 100%;
+    height: 50px;
+    overflow: hidden;
+}
+
+#ht-dialog .ht-header img {
+    margin: 0 auto 4px auto;
+    // max-height: 46px; ??? why was this even a thing???
+}
+
+#ht-dialog .ht-header > .ht-heading {
+    font-size: 25px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+
+    color: #5d6167;
+}
+
+#ht-dialog .ht-header > .ht-subtitle {
+    font-size: 12px;
+    color: #9099a3;
+
+    margin: 5px 0 0 0;
+}
+
+
+#ht-dialog .ht-icon.medium {
+    height: 40px;
+    width: 40px;
+    background-size: 40px 40px;
+
+    margin: 30px auto 0 auto;
+
+    background-repeat: no-repeat;
+}
+
+#ht-dialog .htQuestion {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    padding: 20px;
+    padding-right: 40px;
+    color: #29abb0;
+    padding-bottom: 0px;
+    font-size: 16px;
+}
+
+input #ht-question{
+    margin-top: 20px;
+    border: solid 1px #29abb0;
+}
+
+input#ht_question{
+    width: 100%;
+}
+
+#ht-dialog > .ht-footer{
+    clear: both;
+}
+
+.htQuestion .question-submit{
+    /*width: 98%;*/
+    cursor:pointer;
+    /*margin-top: 20px;*/
+    float: center;
+    text-align:left;
+    border: solid 1px #29abb0;
+    background-color:#eceef1;
+    padding: 15px;
+    /*margin-right: -20px;*/
+    color: #29abb0;
+    text-align: center;
+    font-family: 'Modum','HelveticaNeue', 'Open Sans', sans-serif;
+    line-height: 1;
+    font-weight: 400; 
+    font-size: 12px;
+
+    position: relative;
+    left: 10px;
+    /*right: 0px;*/
+    display: block;
+    width:90%;
+    margin: 20px auto -10px;
+}
+
+.htQuestion .question-submit:hover, 
+.htQuestion .question-submit:active,
+.htQuestion .question-submit:focus{
+    background-color:#FFF;
+    color: #29abb0;
+}
+
+#ht-dialog > .ht-footer {
+    padding: 0px 0px 20px 0px;
+
+    text-align: center;
+    font-size: 11px;
+    color: #9099a3;
+}
+
+#ht-dialog .ht-footer > a {
+    text-decoration: none;
+}
+
+#ht-dialog .ht-footer > a:link {color:#9099a3;}
+#ht-dialog .ht-footer > a:visited {color:#9099a3;}
+#ht-dialog .ht-footer > a:hover {color:#5d6167; text-decoration: underline}
+#ht-dialog .ht-footer > a:active {color:#9099a3;}
+
+/* ----- Timer ----- */
+
+#ht-timer {
+    border: 1px solid #ccd0d5;
+    border-bottom: none;
+    border-radius: 2px 2px 0 0;
+
+    position: fixed;
+    bottom: -62px;
+    right: 20px;
+
+    width: 60px;
+
+    padding: 10px;
+    padding-bottom: 15px;
+
+    background-color: white;
+    cursor: pointer;
+    display: none;
+}
+
+#ht-timer:hover {
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2);
+}
+
+#ht-timer > .ht-timerIcon {
+    height: 30px;
+    width: 30px;
+
+    background-image: asset-url('clock-yellow.png');
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+
+    display: inline-block;
+
+    opacity: 0.8;
+
+    float: left;
+}
+
+#ht-timer > .ht-timerToggle {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 14px;
+
+    margin-right: -3px;
+    margin-top: -5px;
+
+    float: right;
+
+    color: #5d6167;
+}
+
+#ht-timer:hover > .ht-timerIcon {
+    opacity: 1;
+}
+
+#ht-timer:hover > .ht-timerToggle {
+    text-shadow: 0px 0px 3px black;
+}
+
+#ht-timer > .ht-timerDescription {
+    float: left;
+    margin: 4px 0px 0px 10px;
+
+    display: none;
+
+    color: #5d6167;
+}
+
+#ht-timer .ht-timerTime > .ht-timeSeparator {
+    margin: 0 -3px;
+}
+
+#ht-timer .ht-timerTime {
+    margin-top: 4px;
+}
+
+/* ----- Pay Options ----- */
+
+#ht-dialog > .ht-thankYou {
+    display: none;
+
+    position: relative;
+}
+
+#ht-dialog .ht-thankYou > .close, #ht-dialog .ht-iframe > .close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+
+    height: 12px;
+    width: 12px;
+
+    background-image: asset-url('btn-close.png');
+
+    cursor: pointer;
+
+    opacity: 0.5;
+}
+
+#ht-dialog .ht-thankYou > .close:hover, #ht-dialog .ht-iframe > .close:hover {
+    opacity: 1;
+}
+
+#ht-dialog .ht-thankYou > .htHeader, #ht-dialog .ht-iframe > .htHeader {
+    display: block;
+    background: white;
+    padding-top: 40px;
+    padding-bottom: 30px;
+    border-radius: 5px 5px 0 0;
+    text-align: center;
+    margin: 0;
+    font-size: 20px;
+    color: #4e5256;
+    font-weight: normal;
+}
+
+#ht-dialog .ht-iframe div.ht-yourOrder {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+#ht-dialog .ht-iframe div.htHelpLine {
+    text-align: center;
+    color: #fff;
+    background-color: #b0b6be;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 9px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #ccd0d5;
+}
+
+#ht-dialog .ht-iframe div.ht-paypal-link, div.ht-tweet-link {
+    font-size: 14px;
+    font-weight: bold;
+    margin: auto auto;
+    text-align: right;
+}
+
+#ht-dialog .ht-iframe div.ht-paypal-link, #ht-dialog div.ht-tweet-link {
+    margin-top: 5px;
+    width: 680px;
+    height: 10px;
+}
+
+#ht-dialog .ht-iframe div.ht-paypal-link, #ht-dialog .ht-iframe div.ht-tweet-link {
+    margin-top: 30px;
+    width: 500px;
+    height: auto;
+}
+
+#ht-dialog .ht-iframe div.ht-tweet-link {
+    display: none;
+}
+
+#ht-dialog .ht-link {
+    cursor: pointer;
+    color: #f7931a;
+    text-decoration: none;
+}
+
+#ht-dialog .ht-link:hover {
+    text-decoration: underline;
+}
+
+
+#ht-dialog .ht-thankYou > h4.articlePass,
+#ht-dialog .ht-iframe > h4.articlePass {
+    background-image: asset-url('image-articlepass.png');
+}
+
+#ht-dialog .ht-thankYou > h4.hourPass,
+#ht-dialog .ht-iframe > h4.hourPass {
+    background-image: asset-url('image-hourpass.png');
+}
+
+#ht-dialog .ht-thankYou > h4.dayPass,
+#ht-dialog .ht-iframe > h4.dayPass {
+    background-image: asset-url('image-daypass.png');
+}
+
+
+#ht-dialog .ht-thankYou > h4 {
+    display: block;
+    background: white;
+    padding: 90px 0 35px 0;
+    border-radius: 5px 5px 0 0;
+    text-align: center;
+    border-bottom: 1px solid #ccd0d5;
+    margin: 0;
+    font-size: 20px;
+    color: #4e5256;
+    font-weight: normal;
+    background-position: center 35px;
+    background-repeat: no-repeat;
+}
+
+#ht-dialog .ht-thankYou > p {
+    padding: 40px;
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: normal;
+    color: #5d6167;
+
+    text-align: center;
+}
+
+#ht-dialog .ht-thankYou > .ht-thanksContinue {
+    border-radius: 2px;
+    cursor: pointer;
+
+    padding: 10px 0;
+    width: 120px;
+
+    background-color: #f7931a;
+
+    text-align: center;
+
+    margin: 0 auto;
+
+    color: white;
+    font-size: 16px;
+}
+
+#ht-dialog .ht-thankYou > .ht-thanksContinue:hover {
+    box-shadow: inset 0px -2px 2px rgba(0, 0, 0, 0.2);
+    background-color: #ffa035;
+}
+
+#ht-dialog .ht-thankYou > .ht-thanksContinue:active {
+    box-shadow: inset 0px 2px 2px rgba(0, 0, 0, 0.1);
+    background-color: #e28418;
+}
+
+/* ----- Iframe Styling ---- */
+
+#ht-dialog > .ht-iframe {
+    display: none;
+
+    position: relative;
+
+    width: 100%;
+    border: none;
+}
+
+
+#ht-dialog .ht-iframe #ht-iframe {
+    width: 500px;
+    height: 155px;
+
+    margin: 20px auto;
+    display: block;
+
+    overflow: hidden;
+}
+
+#ht-dialog .ht-expired, #ht-dialog .ht-otherWindow {
+    display: none;
+    margin: 50px 0 10px 0;
+    font-size: 18px;
+    text-align: center;
+    line-height: 1.5 !important;
+}
+
+#ht-dialog .ht-cancelIframe {
+    text-align: center;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+#ht-dialog .ht-cancelIframe:hover {
+    color: #f7931a;
+}
+
+#ht-dialog .ht-tweet-text, #ht-dialog .ht-tweet-button {
+    float: right;
+    color: #5d6167;
+}
+
+#ht-dialog .ht-tweet-button {
+    margin-left: 10px;
+    position: relative;
+    top: -4px;
+}
+
+#ht-dialog .ht-bitpay-alternative {
+    display: none;
+}
+
+.navbar-link {
+    color: white;
+}
+
+.ht-sponsor-footer, .ht-sponsor-footer a {
+    text-align: center;
+    font-size: 0.7em;
+    text-decoration: none;
+    margin: 0 0 25px;
+    color: #9099a3;
+}
+
+.ht-sponsor-footer a {
+    font-size: 0.95em;
+    margin: 0;
+    padding: 8px !important;
+    border: 10px;
+    border-radius: 3px;
+    background: #FFBF3F;
+    color: white;
+}
+
+@media screen and (orientation:portrait) {
+/*Attempted fix for mobile*/
+    #ht-dialog {
+        margin-top: 0;
+        top: 0;
+        left: 0;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        /*max-width: 550px;*/
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+
+    /*    position: fixed;
+        min-height: 460px;
+        height: auto;
+        top: 35%;
+        left: 50%;
+        margin-top: -235px;
+        margin-left: -280px;
+        top: 35%;
+        left: 50%;
+        border-radius: 5px;
+        border: 1px solid #868686;
+        */
+
+    }
+}

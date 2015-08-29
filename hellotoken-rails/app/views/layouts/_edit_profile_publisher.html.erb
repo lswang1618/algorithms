@@ -1,0 +1,126 @@
+<div class="row">
+  <div class="small-12 medium-12 large-12 columns">
+    <h3>Account information</h3>
+  </div>
+</div>
+<!-- Client ID -->
+<div class="row">
+  <div class="small-12 columns">
+    <div class="field-text"> 
+      <% if current_publisher.verified? %> <!-- Should be a helper.. -->
+        Client ID (don't share):
+        <span class="grey-font italic-style"><%= current_publisher.alpha_id %></span>
+      <% else %>
+        Your client ID will appear here when your account is verified.
+      <% end %>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 medium-3 large-3 columns">
+    <div class="field">
+      <%= f.label :name, "Name", :class => 'field_label' %>
+    </div>
+  </div>
+  <div class="small-12 medium-9 large-9 columns">
+    <div class="field">
+      <%= f.text_field :name, :class => 'text_field user_text_field', :placeholder => "Your name", :required => 'required', :minlength => 3, :maxlength => 40 %>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 medium-3 large-3 columns">
+    <div class="field">
+      <%= f.label :blog_name, "Blog name", :class => 'field_label' %>
+    </div>
+  </div>
+  <div class="small-12 medium-9 large-9 columns">
+    <div class="field">
+      <%= f.text_field :blog_name, :class => 'text_field user_text_field', :placeholder => "Your blog's name (without www. or m.)".html_safe, :required => 'required', :minlength => 3, :maxlength => 40 %>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 medium-3 large-3 columns">
+    <div class="field">
+      <%= f.label :domain, "Blog URL", :class => 'field_label' %>
+    </div>
+  </div>
+  <div class="small-12 medium-9 large-9 columns">
+    <div class="field">
+      <%= f.text_field :domain, :class => 'text_field user_text_field', :placeholder => "Blog domain", :required => 'required', :minlength => 3, :maxlength => 40 %>
+      <%#= f.url_field :domain, :class => 'text_field user_text_field', :placeholder => "Blog domain (without the 'www')".html_safe, :required => 'required', :minlength => 3, :maxlength => 40 %>
+      <%# text_field only required b/c I need localhost during test -_- %>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="small-12 columns">
+    <div class="field">
+      <%= f.label :category_id , "You need to select a category so your readers see the right questions:", :class => 'field_label' %>  
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 medium-12 large-12 columns">
+    <div class="field">
+      <!--Rails should be auto-filling with the current user's category, 
+          but I think devise messes it up; so we have to have that
+          second argument in options_for_select for now-->
+      <%= f.select :category_id, options_for_select(@categories, resource.category_id), :prompt => "Please select a category for your blog"  %>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 medium-12 large-12 columns">
+    <h3>Display preferences</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 columns">
+    <div class="field-text">
+      You can add your own logo to the question box (optional).
+    </div>
+  </div>
+</div>
+<!-- Logo image uploading -->
+<div class="row">
+  <div class="small-12 columns">
+    <%= f.file_field :logo, accept: 'image/*', :class => "upload-button", onchange: "loadFile(event)" %>
+  </div>
+</div>
+<div class="row text-center medium-padding-bottom medium-padding-top">
+  <div class="small-12 columns">
+    <% if resource.logo_file_name_changed? %> <!-- fix issue with dirty but unsaved record changes-->
+      <%= resource.logo_file_name = resource.logo_file_name_was %> 
+    <% end %>
+    <%= image_tag(resource.logo.url(:icon), id: "logo_preview" )%>
+  </div>
+</div>
+
+<div class="row">
+  <div class="small-12 columns">
+    <div class="field">
+      <small>
+        hellotoken resizes your logo to fit; it will appear exactly as above. If you're unhappy with how it looks, please change the image size and upload it again.
+      </small>
+      <br><br>
+      <%= check_box_tag :default_logo, 1, false, :class => 'checkbox' %>
+      <%= label_tag :default_logo, "Check here to delete your logo and restore default.", :class => 'field_label' %>
+    </div>
+  </div>
+</div>
+
+<script>
+  var loadFile = function(event) {
+    var output = document.getElementById('logo_preview');
+    var img_cached_file = event.target.files[0];
+    if (img_cached_file != undefined){
+      output.src = URL.createObjectURL(img_cached_file);
+    }
+    else{
+      output.src = "<%= image_url(resource.logo.url(:icon)) %>"
+    }
+  };
+</script>

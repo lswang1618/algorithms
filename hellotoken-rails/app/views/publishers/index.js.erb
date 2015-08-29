@@ -1,0 +1,3 @@
+// Just rerender the partial, and it'll take care of the rest
+$('#admin-table-publishers').replaceWith('<%= escape_javascript render("table", publishers:@publishers) %>');
+// If we wanted, we could do other stuff, too

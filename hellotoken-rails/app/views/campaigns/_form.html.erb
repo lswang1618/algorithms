@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="small-12 columns" >
+    <div class="campaign-form-page-selector">
+      <!-- see stylesheet for .campaign-form-page-selector; I just stuck some test values there, but you can change it to w/e-->
+      <%= radio_button_tag :page, "campaign", checked: "checked" %>
+      <%= label_tag :page_campaign, "1. Campaign details", :id => "label-campaign", :class => "selected" %>
+      <%= radio_button_tag :page, "questions" %>
+      <%= label_tag :page_questions, "2. Question details", :id => "label-questions" %>
+      <%= radio_button_tag :page, "summary" %>
+      <%= label_tag :page_summary, "3. Summary and payment", :id => "label-summary" %>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="small-12 columns">
+    <%= form_for @campaign, url: {action: "purchase"}, html: {id: "campaign-form"} do |f| %>
+      <%= render 'form_fields', f: f %>
+    <% end %>
+  </div>
+</div>
+
+

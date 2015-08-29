@@ -1,0 +1,59 @@
+<%= form_for(@campaign) do |f| %>
+  <% if @campaign.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@campaign.errors.count, "error") %> prohibited this campaign from being saved:</h2>
+
+      <ul>
+      <% @campaign.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <p>
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+  </p>
+  <p>
+    <%= f.label :limit, "Number of respondents per question:", :class => 'field_label', for: "number_respondents" %>
+    <%= f.number_field :limit, :value => (session['campaign'].present? ? session['campaign']['number_respondents']:100), :min => 1, :class => 'number_field', :id => 'number_respondents' %>
+    <%= f.label :complete, "Is the campaign complete? (i.e. will questions stop showing?)" %>
+    <%= f.check_box :complete %>
+  </p>
+  <p>
+    <%= f.label :target_categories, "Want to target specific types of blogs?", :class => 'field_label', for: "target_categories_checkbox" %>
+    <%= f.check_box :target_categories, :class => 'checkbox', :id => 'target_categories_checkbox' %>
+    <%= f.collection_check_boxes :category_ids, Category.all, :id, :name do |b| %> 
+      <%#= You can just use {f.collection_check_boxes :category_ids, Category.all, :id, :name} %>
+      <%# but this adds some customization options %>
+      <%# add a checked: "something" option in collection_check_boxes to customize %>
+      <div class="small-6 medium-6 large-4 columns">
+        <%= b.check_box(class: "all_choices")%>
+        <%= b.label(class: "all_choices")%>
+      </div>
+    <% end %>
+  </p>
+  <p>
+    <%= f.label :target_age, "Want to target by age range?", :class => 'field_label' %>
+    <%= f.number_field :age_range_lower, :min => 0, :class => 'number_field', placeholder: 'Age range lower boundary' %>
+    <%= f.number_field :age_range_upper, :max => 99, :class => 'number_field', placeholder: 'Age range upper boundary' %>       
+  </p>
+  <p>
+    <%= f.check_box :target_gender, :class => 'checkbox' %>
+    <%= f.label :target_gender, "Want to target by gender?", :class => 'field_label'%>      
+    <%= f.check_box :target_male, :class => '' %>
+    <%= f.label :target_male, "Male", :class => '' %>
+    <%= f.check_box :target_female, :class => '' %>
+    <%= f.label :target_female, "Female", :class => '' %>
+    <%= f.check_box :target_other, :class => '' %>
+    <%= f.label :target_other, "Other", :class => '' %>
+  </p>
+  <p>
+    <%= f.submit "Update campaign"%>
+  </p>
+
+<% end %>
+
+
+

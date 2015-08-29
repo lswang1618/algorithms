@@ -1,0 +1,145 @@
+<div class="row">
+  <div class="small-12 medium-12 large-12 columns">
+    <h3>Account information</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 medium-3 large-4 columns">
+    <div class="field">
+      <%= f.label :name, "Name", :class => 'field_label' %>
+    </div>
+  </div>
+  <div class="small-12 medium-9 large-8 columns">
+    <div class="field">
+      <%= f.text_field :name, :class => 'text_field user_text_field', :placeholder => "Your name", :required => 'required', :minlength => 3, :maxlength => 40 %>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 medium-3 large-4 columns">
+    <div class="field">
+      <%= f.label :company_name, "Company name", :class => 'field_label' %>
+    </div>
+  </div>
+  <div class="small-12 medium-9 large-8 columns">
+    <div class="field">
+      <%= f.text_field :company_name, :class => 'text_field user_text_field', :placeholder => "Your company name", :required => 'required', :minlength => 3, :maxlength => 40, :id => "company_name" %>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 medium-3 large-4 columns">
+    <div class="field">
+      <%= f.label :website, "Company website", :class => 'field_label' %>
+    </div>
+  </div>
+  <div class="small-12 medium-9 large-8 columns">
+    <div class="field">
+      <%= f.text_field :website, :class => 'text_field user_text_field', :placeholder => "Company website url", :required => 'required', :minlength => 3, :maxlength => 40, :id => "company_website" %>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="small-12 medium-12 large-12 columns">
+    <h3>Style preferences</h3>
+  </div>
+</div>
+
+<div class="row">
+  <div class="small-12 columns">
+    <div class="field">
+      <%= f.label :use_custom_colors, "Customize question box footer with company info?", :class => 'field_label' %>
+      &nbsp;
+      <%= f.check_box :use_custom_colors, :class => 'checkbox', :id => "sponsor_preference" %>
+      <!-- <br> -->
+      <!-- (Unchecking box will reset footer settings to default.) -->
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="small-12 columns">
+    <div class="field-text">
+      You can choose your own colors for the footer (optional):
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="field">
+    <div class="small-6 columns">
+      <%= f.label :logo_text_hex, "Text color :", :class => 'field_label' %> 
+      <br>
+      <small>
+        (<%= link_to "reset to default", "#", :class => "reset_link", :onclick=>"resetColor('#footer_text_color', '#FFFFFF');" %>)
+      </small>
+    </div>
+    <div class="small-6 columns">
+      <%= f.color_field :logo_text_hex, :class => 'color_picker', :id => 'footer_text_color' %>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="field">
+    <div class="small-6 columns">
+      <%= f.label :logo_background_hex, "Background color :", :class => 'field_label' %>
+      <br>
+      <small>
+        (<%= link_to "reset to default", "#", :class => "reset_link", :onclick=>"resetColor('#footer_background_color', '#FFBF3F');" %>)
+      </small>
+    </div>
+    <div class="small-6 columns">
+      <%= f.color_field :logo_background_hex, :class => 'color_picker', :id => 'footer_background_color' %>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 columns">
+    <div class="field-text">
+      Preview of question box footer :
+    </div>
+    <div class="ht-dialog-preview">
+      <div class="ht-sponsor-footer-preview">
+        <a id="ht-sponsor_link" href=<%=current_researcher.get_website %> target="_blank" style="color:<%=current_researcher.get_text_color%>; background:<%=current_researcher.get_background_color%>"><%=current_researcher.get_sponsor_text %></a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+
+  function resetColor(divselector, default_color){
+    $(divselector).val(default_color);
+    updateFooterPreview()
+  }
+
+  $("#sponsor_preference, #footer_text_color, #footer_background_color, #company_name, #company_website").change(updateFooterPreview);
+
+    function updateFooterPreview() {
+      var website_url = $( "#company_website" )[0].value;
+      if (website_url.substring(0,7) != "http://")
+        website_url = "http://" + website_url;
+      // Update text and link
+      if ($('#sponsor_preference').prop('checked')) {
+        // custom text
+        $( "a#ht-sponsor_link" ).text( "Sponsored by " + $( "#company_name" )[0].value);
+        // custom link
+        $( "a#ht-sponsor_link" ).prop("href", website_url);
+        // custom colors
+        $( "a#ht-sponsor_link" ).css("background", $( "#footer_background_color" )[0].value);
+        $( "a#ht-sponsor_link" ).css("color", $( "#footer_text_color" )[0].value);
+      } else {
+        // reset text
+        $( "a#ht-sponsor_link" ).text( "Powered by hellotoken" );
+        // reset link
+        $( "a#ht-sponsor_link" ).prop("href", "//"+"www.hellotoken.com");
+        // reset colors        
+        $( "a#ht-sponsor_link" ).css("background", '#FFBF3F');
+        $( "a#ht-sponsor_link" ).css("color", '#FFFFFF');
+      }
+      
+    }
+
+
+</script>

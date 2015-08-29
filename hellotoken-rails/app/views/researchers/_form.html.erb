@@ -1,0 +1,55 @@
+<%= form_for(@researcher) do |f| %>
+  <% if @researcher.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@researcher.errors.count, "error") %> prohibited this researcher from being saved:</h2>
+
+      <ul>
+      <% @researcher.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+      <%= f.label :email, :class => 'field_label' %>
+      <%= f.email_field :email, :class => 'text_field user_text_field', autofocus: true, :required => 'required', :minlength => 3, :maxlength => 40, :pattern => '[^@]+@[^@]+\.[a-zA-Z]{2,6}' %>
+    <br>
+      <%= f.label :password, "New password", :class => 'field_label' %>
+      <%= f.text_field :password, autocomplete: "off", :class => 'text_field user_text_field', :placeholder => "Leave blank if not changing", :minlength => 8, :maxlength => 40 %>
+    <br>
+      <%= f.label :name, "Name", :class => 'field_label' %>
+      <%= f.text_field :name, :class => 'text_field user_text_field', :placeholder => "Your name", :required => 'required', :minlength => 3, :maxlength => 40 %>
+    <br>
+      <%= f.label :company_name, "Company name", :class => 'field_label' %>
+      <%= f.text_field :company_name, :class => 'text_field user_text_field', :placeholder => "Your company's name", :required => 'required', :minlength => 3, :maxlength => 40 %>
+    <br>
+      <%= f.label :website, "Website", :class => 'field_label' %>
+      <%= f.text_field :website, :class => 'text_field user_text_field', :placeholder => "Your company's website".html_safe, :required => 'required', :minlength => 3, :maxlength => 40 %>
+    <br>
+      <%= f.label :logo_text_hex, "Text color :" %> 
+      <%= f.color_field :logo_text_hex%>
+      <%= f.label :logo_background_hex, "Background color :"%>
+      <%= f.color_field :logo_background_hex %>
+    <br>
+      <% if @researcher.use_custom_colors %>
+      <p><a href=<%=@researcher.get_website %> target="_blank" style="color:<%=@researcher.get_text_color%>; background:<%=@researcher.get_background_color%>; border-style: solid; border-color: black"><%= @researcher.get_sponsor_text %></a></p>
+      <% else %>
+        Custom logo off
+      <% end %>
+    <br>
+      <%= f.label :use_custom_colors %>
+      <%= f.check_box :use_custom_colors %>
+    <br>
+      <%= f.label :admin %>
+      <%= f.check_box :admin %>
+    <br>
+      <%= f.label :verified %>
+      <%= f.check_box :verified %>
+    <br>
+      <%= f.submit "Update account"%>
+    <br>
+
+<% end %>
+
+
+

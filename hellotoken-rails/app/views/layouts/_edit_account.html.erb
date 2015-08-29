@@ -1,0 +1,114 @@
+<%= devise_error_messages! %>
+<div id="page" class="account_page">
+  <div class="row">
+    <div class="small-12 medium-12 large-12 columns">
+      <h1>Edit account<%#= resource_name.to_s.humanize %></h1>
+    </div>
+  </div>
+
+  <% if @type == "publisher" %>
+    <% html_var = { method: :put, multipart: true } %>
+  <% elsif @type == "researcher" %>
+    <% html_var = { method: :put } %>
+  <% end %>
+
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: html_var) do |f| %>  
+    <div class="row">
+      <div class="small-12 medium-6 large-6 columns">
+        <% if @type == "publisher" %>
+          <%= render partial: 'layouts/edit_profile_publisher', locals: {:f => f} %>
+        <% else %>
+          <%= render partial: 'layouts/edit_profile_researcher', locals: {:f => f} %>
+        <% end %>
+      </div>
+
+      <div class="small-12 medium-6 large-6 columns">
+        <div class="row">
+          <div class="small-12 medium-12 large-12 columns">
+            <h3>Account email</h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-12 medium-2 large-4 columns">
+            <div class="field">
+              <%= f.label :email, :class => 'field_label' %>
+            </div>
+          </div>
+          <div class="small-12 medium-10 large-8 columns">
+            <div class="field">
+              <%= f.email_field :email, :class => 'text_field user_text_field', autofocus: true, :required => 'required', :minlength => 3, :maxlength => 40, :pattern => '[^@]+@[^@]+\.[a-zA-Z]{2,6}' %>
+            </div>
+          </div>
+        </div>
+        <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+          <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+        <% end %>
+        <br>
+        <div class="row">
+          <div class="small-12 medium-12 large-12 columns">
+            <h3>Change password</h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-12 medium-2 large-4 columns">
+            <div class="field">
+              <%= f.label :password, "New password", :class => 'field_label' %>
+            </div>
+          </div>
+          <div class="small-12 medium-10 large-8 columns">
+            <div class="field">
+              <%= f.password_field :password, autocomplete: "off", :class => 'text_field user_text_field', :placeholder => "Leave blank if not changing", :minlength => 8, :maxlength => 40 %>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-12 medium-2 large-4 columns">
+            <div class="field">
+              <%= f.label :password_confirmation, "New password again", :class => 'field_label' %>
+            </div>
+          </div>
+          <div class="small-12 medium-10 large-8 columns">
+            <div class="field">
+              <%= f.password_field :password_confirmation, autocomplete: "off", :class => 'text_field user_text_field', :placeholder => "Leave blank if not changing", :minlength => 8, :maxlength => 40 %>
+            </div>
+          </div>
+        </div>
+
+        <% if @type == "publisher" %>
+          <%= render partial: 'layouts/edit_links_publisher' %>
+        <% end %>
+
+      </div>
+    </div>
+    <br><br>
+
+    <div class="row background-grey">
+      <div class="small-12 medium-12 large-12 columns">
+        <h3>Confirm account changes by entering current password</h3>
+      </div>
+      <div class="small-12 medium-12 large-12 columns">
+        <div class="field">
+          <%= f.password_field :current_password, autocomplete: "off", :class => 'text_field user_text_field',
+              :placeholder => 'Just to make sure it\'s you', :required => 'required' %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="small-12 medium-12 large-12 columns">
+        <%= f.submit "Update account", :class => "yellow-button" %>
+        <%= link_to "Go back", :back, :class => "yellow-button" %>
+      </div>
+    </div>
+  <% end %>
+  <div class="row">
+    <hr style="margin:80px 10px 10px;"/>
+  </div>
+  <div class="row">
+    <div class="small-12 medium-12 large-12 columns">
+      <h3>Unhappy?</h3>
+      <%= button_to "Cancel your account", dashboard_path, method: :get, data: { confirm: "Please email us to delete your account." }, :class => "red-button", :disabled => false %>
+      <%#= button_to "Cancel your account", registration_path(resource_name), method: :delete, data: { confirm: "Please email us to delete your account." }, :class => "red-button", :disabled => false %>
+      <br><br>
+    </div>
+  </div>
+</div>

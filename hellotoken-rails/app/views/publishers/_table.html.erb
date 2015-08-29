@@ -1,0 +1,36 @@
+<div class="admin-table" id="admin-table-publishers">
+  <%= render "layouts/paginate", resources: publishers %>
+  
+  <table>
+    <thead><tr>
+      <th>Email</th>
+      <th>Name</th>
+      <th>Domain</th>
+      <th>Blog name</th>    
+      <th>Category</th>
+      <th>Client ID</th>
+      <th>Verified</th>    
+      <th>Num responses</th>    
+      <th>Num moneyed responses</th>    
+      <th>Created at</th>
+      <th>Last sign in</th>
+      <th>Logo</th>
+    </tr></thead>
+    <% publishers.each do |publisher| %>
+      <tr>
+        <td><%= link_to publisher.email, publisher %></td>
+        <td><%= publisher.name %></td>
+        <td><%= publisher.domain %></td>
+        <td><%= publisher.blog_name %></td>
+        <td><%= if publisher.category_id.nil? then nil else publisher.category.name end %> </td>
+        <td><%= publisher.alpha_id %></td>
+        <td style="color:<%= if publisher.verified? then "green" else "red" end %>"><%= publisher.verified? %></td>
+        <td><%= publisher.responses.size %></td>
+        <td><%= publisher.money_responses.size %></td>
+        <td><%= publisher.created_at %></td>
+        <td><%= publisher.last_sign_in_at %></td>
+        <td><%= if publisher.logo.exists? then image_tag publisher.logo.url(:icon) else "none" end %></td>
+      </tr> 
+    <% end %>
+  </table>
+</div>

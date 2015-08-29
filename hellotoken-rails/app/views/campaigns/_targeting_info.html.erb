@@ -1,0 +1,193 @@
+<% age_range_buckets = [["< 18",1], ["18-24",2], ["25-44",3], ["45-64",4], ["65+",5]] %>
+
+<div class="row">
+  <div class="small-12 medium-12 large-12 columns">
+    <div class="campaign_targeting">
+      <p>
+        Advanced respondent targeting (optional)
+        <%= link_to "&#9660;".html_safe, "javascript:void(0)", :onclick=>"toggleDivText('.toggle_button_small', '#campaign_targeting');", :class => "toggle_button_small" %>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div id="campaign_targeting">
+  <hr><br />
+  <div class="row">
+    <div class="small-7 medium-6 large-5 columns">
+      <%= f.label :target_categories, "Want to target specific types of blogs?", :class => 'field_label', for: "target_categories_checkbox" %>
+    </div>
+    <div class="small-5 medium-6 large-7 columns">
+      <div class="horizontal-space-37px"></div>
+      <%= f.check_box :target_categories, :class => 'checkbox', :id => 'target_categories_checkbox', :onclick=>"toggleDiv('#category_options');" %>
+    </div>
+    <div class="small-12 columns">
+      <div id="category_options" class="field">
+        <div class="row">
+          <div class="small-6 medium-6 large-4 columns">
+              <%= check_box_tag "selectAll".to_sym, 1, false, :class => 'all_choices ', :id => "selectAll" %>
+              <%= label_tag "selectAll".to_sym, "Select / Deselect All", :class => 'all_choices', :id => "selectAll", :style => "color:black;" %>
+          </div>
+          
+          <%= f.collection_check_boxes :category_ids, Category.all, :id, :name do |b| %> 
+            <%#= You can just use {f.collection_check_boxes :category_ids, Category.all, :id, :name} %>
+            <%# but this adds some customization options %>
+            <%# add a checked: "something" option in collection_check_boxes to customize %>
+            <div class="small-6 medium-6 large-4 columns">
+              <%= b.check_box(class: "all_choices")%>
+              <%= b.label(class: "all_choices")%>
+            </div>
+          <% end %>
+
+          <div class="small-6 medium-6 large-4 columns"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Target age range -->
+    <div class="small-7 medium-6 large-5 columns">
+      <%= f.label :target_age, "Want to target by age range?", :class => 'field_label' %>      
+    </div>
+    <div class="small-5 medium-6 large-7 columns">
+      <div class="horizontal-space-37px"></div>
+      <%= f.check_box :target_age, :class => 'checkbox', :onclick=>"toggleDiv('#age_range');" %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-7 medium-4 large-3 columns">
+      <div id="age_range">
+        <br>
+        <!-- We want to only provide buckets, but campaign actually has two in fields
+             So leave this tag outside the form helper object, and check for it in the strong params
+          --> 
+        <%= select_tag :age_range_option, options_for_select(age_range_buckets, (session['campaign'].present? ? session['campaign']['age_range_option']:nil)) %>
+        <br><br>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Target gender -->
+    <div class="small-7 medium-6 large-5 columns">
+      <%= f.label :target_gender, "Want to target by gender?", :class => 'field_label'%>      
+    </div>
+    <div class="small-5 medium-6 large-7 columns">
+      <div class="horizontal-space-37px"></div>
+      <%= f.check_box :target_gender, :class => 'checkbox', :onclick=>"toggleDiv('#gender_options');" %>
+    </div>
+    <div class="small-12 columns">
+      <div id="gender_options">
+        <br>
+        <%= f.check_box :target_male, :class => '' %>
+        <%= f.label :target_male, "Male", :class => '' %>
+        <%= f.check_box :target_female, :class => '' %>
+        <%= f.label :target_female, "Female", :class => '' %>
+        <%= f.check_box :target_other, :class => '' %>
+        <%= f.label :target_other, "Other", :class => '' %>
+        <br><br>
+      </div>
+    </div>
+  </div>
+  <hr><br />
+  <div class="row">
+    <div class="small-12 columns medium-padding-bottom">
+      <table class="no-border box-shadow-light-grey">
+        <thead>
+          <tr>
+            <th>Advanced options</th>
+            <th>Cost (per response)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Target categories of blogs</td>
+            <td class="center-text">+ <%= (@campaign.prices[:category] *100).to_i %>&#162; </td>
+          </tr>
+          <tr>
+            <td>Target respondents by age range</td>
+            <td class="center-text">+ <%= (@campaign.prices[:age] *100).to_i %>&#162; </td>
+          </tr>
+          <tr>
+            <td>Target respondents by gender</td>
+            <td class="center-text">+ <%= (@campaign.prices[:gender] *100).to_i %>&#162; </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+
+
+  // Targeting variables; used by _summary as well.
+  <% if session['campaign'].present? %>
+    var target_categories = <%= session['campaign']['target_categories'] %>;
+    var target_age = <%= session['campaign']['target_age'] %>;
+    var target_gender = <%= session['campaign']['target_gender'] %>;
+  <% else %>
+    var target_categories = false;
+    var target_age = false;
+    var target_gender = false;
+  <% end %>
+
+  // Hide sections on load based on previous selections for current order
+  if (!target_categories && !target_age && !target_gender)
+    $("#campaign_targeting").hide();
+
+  if (!target_age) {
+    $("#age_range").hide();
+  }
+  
+  if (!target_gender) {
+    $("#gender_options").hide();
+  }
+
+  if (!target_categories) {
+    $("#category_options").hide();;
+  }
+
+  $("#summary").hide();
+
+  // To toggle sections when clicked
+
+  function toggleDivText(toggle_button, divselector){
+    // $(divselector).toggle();
+    toggleDiv(divselector)
+
+    if($(toggle_button).text()=="▲")
+    {
+        $(toggle_button).text("▼").html();
+    } else {
+        $(toggle_button).text("▲");
+    }
+  }
+
+  function toggleDiv(divselector){
+    $(divselector).slideToggle();
+    toggleTargetingVariable(divselector);
+    updateSummaryTable();
+  }
+
+  function toggleTargetingVariable(target){
+    if (target == "#category_options") {target_categories = !target_categories}
+    if (target == "#age_range") {target_age = !target_age}
+    if (target == "#gender_options") {target_gender = !target_gender}
+  }
+
+  // jQuery to select all checkboxes in section
+  $('#selectAll').click(function() {
+     if (this.checked) {
+         $('input[class^="all_choices"]').each(function() {
+             this.checked = true;                        
+         });
+     } else {
+        $('input[class^="all_choices"]').each(function() {
+             this.checked = false;                        
+         });
+     } 
+  });
+
+</script>

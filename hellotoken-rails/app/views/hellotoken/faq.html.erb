@@ -1,0 +1,226 @@
+<%= render 'layouts/logo' %>
+<div class="row">
+  <div class="small-12 columns">
+    <h2 class="medium-margin-bottom">
+      Frequently asked questions
+    </h2>
+  </div>
+</div>
+<!-- faq TODO:
+  - add a table of contents at the top
+  - size and bold question headers (the h3 tags)
+  - center questions and answers appropriately
+  - bold questions (the faq-question class)
+  -->
+<div class="row">
+  <div class="small-12 columns">
+    <h4 class="small-margin-bottom">
+      General questions
+      <%= link_to "&#9660;".html_safe, "javascript:void(0)", :onclick=>"toggleDivText('.toggle-general', '#general-questions');", :class => "toggle_button toggle-general" %>
+    </h4>
+    <section id="general-questions">
+      <h5>
+        Just what <i>is</i> hellotoken?
+      </h5>
+      <p>
+        We replace ads with simple one-click questions. If you're interested in earning 10x the money while giving your readers access to the same great content as always, if you're interested in connecting your questions directly to your target audience, or if you just love online content as much as we do, then this is the website for you.
+      </p>
+      <h5>
+        Do I qualify as a publisher?
+      </h5>
+      <p>
+        Right now we're only available on the wordpress.org platform as a closed beta. If you're running on wordpress.org, then 
+        <%= link_to "sign up", register_path %>
+        and fill out your publishing details. We'll take a look and if you seem like a good fit, we'll bring you on board! Currently, you must have 10,000 hits per month at a minimum to join.
+      </p>
+      <h5>
+        Do I qualify as a researcher?
+      </h5>
+      <p>
+        Right now we're in a closed beta, so interest in becoming a researcher should be directed toward support [at] hellotoken.com. Shoot them an email and they'll work with you to determine your qualifications.
+      </p>
+      <h5>
+        What an amazing idea! Your team must be filled with beautiful, intelligent people!
+      </h5>
+      <p>
+        That's not a question, but thanks! If you're interested in meeting our members, you can check out our 
+        <%= link_to "about page", about_path %>
+        .
+      </p>
+    </section> 
+
+    <h4 class="small-margin-bottom">
+      Researcher account questions
+      <%= link_to "&#9660;".html_safe, "javascript:void(0)", :onclick=>"toggleDivText('.toggle-researcher', '#researcher-questions');", :class => "toggle_button toggle-researcher" %>
+    </h4>
+    <section id="researcher-questions">
+      <h5>
+        So how do I use this thing?
+      </h5>
+      <p>
+        Click "Create a Campaign" on your dashboard. Put in all the relevant information like your choice demographics and a campaign title. Fill in your desired questions, proceed to the payment, review your details, and check out. It's that easy! You can view your incoming responses on your dashboard, where you can either view quick summaries or detailed responses as CSV files.
+      </p>
+      <h5>
+        What payment options do I have?
+      </h5>
+      <p>
+        Right now we only accept credit card payments through the Stripe platform. We don't yet accept alternate methods like PayPal or Bitcoin, but we'll always accept love and gratitude! (Just not to pay for your questions.)
+      </p>
+      <h5>
+        What's the minimum number of questions I can ask?
+      </h5>
+      <p>
+        Due to processing fees, we require a minimum of a $10 checkout for any campaign. How you reach this $10 is entirely up to you.
+      </p>
+      <h5>
+        What happens to the money I give you guys?
+      </h5>
+      <p>
+        We'll take a small cut, from which Stripe will take an even smaller cut, but the entirety of the rest of your money goes to support hardworking publishers.
+      </p>
+      <h5>
+        I need to change/delete/add to questions that I've already created. How can I do that?
+      </h5>
+      <p>
+        During the beta we're restricting the questions that can be published, so unfortunately those features aren't available directly. If you'd like to modify your campaigns in any way, please contact support and we'll work with you to do so.
+      </p>
+      <h5>
+        Who answers the questions?
+      </h5>
+      <p>
+        Once you click submit, we automatically and randomly distribute your questions through the blogs in our network; each question is targeted to individual blog readers that fit your demographic criteria.
+      </p>
+      <h5>
+        How do we reduce bias in the questions that we serve?
+      </h5>
+      <p>
+        Unlike most other survey platforms, we don't incentivize readers with money to answer questions nor do we force them to answer questions against their will. This reduces incentive biases. We also randomize distribution to make sure we aren’t cherry-picking users to answer questions, as well as randomize the order answer choices are presented in. We’re building out some fraud detection tools as well, so stay tuned!
+      </p>
+    </section> 
+
+    <h4 class="small-margin-bottom">
+      Publisher account questions
+      <%= link_to "&#9660;".html_safe, "javascript:void(0)", :onclick=>"toggleDivText('.toggle-publisher', '#publisher-questions');", :class => "toggle_button toggle-publisher" %>
+    </h4>
+    <section id="publisher-questions">
+      <h5>
+        So how do I use this thing?
+      </h5>
+      <p>
+        Once you're a verified account, you'll a receive a client ID in your account settings. Use it and closely follow this 
+        <%= link_to "guide", "http://blog.hellotoken.com/?p=26" %> 
+        to set up hellotoken on your WordPress site. Fill out your domain in your account settings (and optionally provide a site logo), and you should start seeing questions appear on your site! You can track the number of responses for your articles by visiting your dashboard.
+      </p>
+      <h5>
+        The most important question: how do I get paid?
+      </h5>
+      <p>
+        Once you hit our minimum of $100 in earnings, you can click our pay-out button on your dashboard to receive money! Right now we payout directly to PayPal accounts--you'll need a valid account to receive money. We're working to expand to other options, so drop us a message if there's a payout option you'd like to see!
+      </p>
+      <h5>
+        I need money now, but the payout button won't appear!
+      </h5>
+      <p>
+        Due to processing fees, we require a $100 minimum before you can payout. Use your response tracker to make sure you've hit the requisite number of responses first!
+      </p>
+      <h5>
+        I paid out, but something went wrong and I didn't get any money.
+      </h5>
+      <p>
+        Remember to provide accurate details to PayPal and check your PayPal account to verify that you can accept transfers. Any payouts still uncollected after 30 days will be refunded to your hellotoken account. If any other errors occur, please contact support and we'll work with you to resolve the payout.
+      </p>
+      <h5>
+        I want to payout but hellotoken is telling me I have unresolved payouts?
+      </h5>
+      <p>
+        For your security, we request that you resolve all payouts in your PayPal account from hellotoken before making any other payouts.
+      </p>
+      <h5>
+        The dashboard is great, but is it possible to [insert feature here]?
+      </h5>
+      <p>
+        We currently provide your payout status and your top earning articles. We're always looking to add new features, so if there's a feature that you think would be useful, let us know at suggestions [at] hellotoken.com!
+      </p>
+    </section> 
+
+    <h4 class="small-margin-bottom">
+      Plugin questions
+      <%= link_to "&#9660;".html_safe, "javascript:void(0)", :onclick=>"toggleDivText('.toggle-plugin', '#plugin-questions');", :class => "toggle_button toggle-plugin" %>
+    </h4>
+    <section id="plugin-questions">
+      <h5>
+        AHHHH MY PLUGIN ISN'T WORKING!!!!
+      </h5>
+      <p>
+        We're here to help! Grab your towel, and 
+        <a href="http://google.com/search?q=hitchhiker%27s+guide+to+the+galaxy+don%27t+panic" target="_blank">don't panic</a>
+        . Try narrowing down the problem. Is it a problem with installation? With changing your settings? Or with the questions appearing on your pages? Closely replicate the steps in our 
+        <a href="http://blog.hellotoken.com/?p=26" target="_blank">guide</a> 
+        to setting up hellotoken, and then return here if problems continue.
+      </p>
+      <h5>
+        Okay, I've got my towel. I'm having trouble installing and activating the plugin.
+      </h5>
+      <p>
+        Make sure you have the most up to date version of the plugin, by directly contacting support@hellotoken.com. Once you have the plugin, navigate to Wordpress's "Add New" page for plugins and choose "Upload plugin." If Wordpress isn't allowing you to upload the plugin, you may have a problem with filesize upload limits. 
+        <a href="http://www.wpbeginner.com/wp-tutorials/how-to-increase-the-maximum-file-upload-size-in-wordpress/" target="_blank">This article</a> 
+        lists some ways you can increase that limit.
+      </p>
+      <h5>
+        The plugin is installed, but I'm having trouble with activating it.
+      </h5>
+      <p>
+        Navigate to hellotoken's "Settings" page and ensure your client ID is correctly entered. If you're not a verified account, your client ID won't be valid either, so please wait for us to onboard you. Otherwise, there may be a connection error. Wait until <a href="http://www.hellotoken.com" target="_blank">hellotoken.com</a> loads for you and try entering the client ID again.
+      </p>
+      <h5>
+        I did all that, but the questions still aren't appearing! This towel is very comfy, though.
+      </h5>
+      <p>
+        Glad the towel's helping. Try waiting a bit--sometimes there just aren't any questions available at the moment that match the demographics of your site. If the problem persists, there might be a conflict between hellotoken and one of your other plugins. If you think this is the case, then please prepare a list of your active plugins and contact support; we'll work tirelessly with you to resolve any conflicts.
+      </p>
+      <h5>
+        Everything finally works! But I'm wondering how I can customize the plugin?
+      </h5>
+      <p>
+        hellotoken is designed to work unobtrusively and flexibly with your site. From the hellotoken settings page in WordPress you can modify the amount of articles readers can see before a question will appear, how long the question will take to appear, how readers who close questions are redirected, and many other settings. Additionally, you can turn hellotoken off for individual posts and pages by navigating to their respective editing pages and toggling the "Activate with hellotoken" checkbox.
+      </p>
+    </section> 
+  </div>
+</div>
+
+<div class="row medium-margin-top">
+  <div class="small-12 medium-8 columns">
+    <p>
+      If you have any other questions, you can email us at contact [at] hellotoken.com. Our support team is happy to help at any time!
+    </p>
+  </div>
+</div>
+
+<script>
+  $("#general-questions, #researcher-questions, #publisher-questions, #plugin-questions").hide()
+
+  function toggleDiv(divselector){
+    $(divselector).slideToggle()
+
+    // Change the targeting variable if on summary page (variable is set there)
+    if (typeof on_summary_page !== 'undefined') {
+      toggleTargetingVariable(divselector)
+      // Trigger change did not work so calling update function directly
+      // $("#target_categories_checkbox").trigger('change')
+      // console.log(calculateResponsePrice())
+      // updateSummaryTable()
+    }
+  }
+
+  function toggleDivText(toggle_button, divselector){
+    // $(divselector).toggle();
+    toggleDiv(divselector)
+
+    if($(toggle_button).text()=="▲")
+    {
+        $(toggle_button).text("▼").html();
+    } else {
+        $(toggle_button).text("▲");
+    }
+  }
+</script>

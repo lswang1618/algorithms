@@ -1,0 +1,11 @@
+<% content_for :title, "Create a new account" %>
+
+<div id="page">
+	<% @type = "researcher" %>
+	<%#= render 'researchers/registrations/new' %>
+	<%= render :partial => "layouts/registration_new" , :locals => {:title => "Researcher" } %>
+	<br><br>
+	<% @type = "publisher" %>
+	<%= render :partial => "layouts/registration_new" , :locals => {:title => "Publisher" } %>
+	<%#= render 'publishers/registrations/new' %>
+</div>

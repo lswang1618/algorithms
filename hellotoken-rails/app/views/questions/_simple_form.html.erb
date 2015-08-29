@@ -1,0 +1,105 @@
+<%= form_for(@question, html: {id: "admin-question-edit"}) do |f| %>
+  <% if @question.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h2>
+
+      <ul>
+      <% @question.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <p>
+    <%= f.label :text %>
+    <%= f.text_field :text %>
+  </p>    
+  <p>
+    <%= f.label :limit, "Number of respondents per question:", :class => 'field_label', for: "number_respondents" %>
+    <%= f.number_field :limit, :class => 'number_field', :id => 'number_respondents' %>
+    <%= f.label :over, "Is the question complete? (i.e. will this queston stop showing?)" %>
+    <%= f.check_box :over %>
+  </p>
+  <p>
+    <%= f.label :demographic, :class => 'field_label' %>
+    <%= f.text_field :demographic, placeholder: "KEEP BLANK! unless you want question showing all the time as demograph question." %>
+  </p>
+  <p>
+    <%= f.label :test, "Test question? (Will show if and only if plugin has demo setting on, even when over limit)" %>
+    <%= f.check_box :test %>
+  </p>
+  <p>
+    <%= f.label :use_images, "Use image answers", :class => 'field_label' %>
+    <%= f.check_box :use_images, class: "checkbox", onclick: "toggleImageUpload()" %>
+  </p>
+  <div class="field">
+    <div class="row">
+        <%= f.fields_for(:choices) do |b| %>
+          <div class="choice-form">
+            <div class="small-6 medium-4 large-4 columns">
+              <%= b.label :text %>
+              <%= b.text_field :text, :class => 'text_field2', :placeholder => "Option #{b.index + 1}".to_sym, :maxlength => 50 %>
+              <% if b.index < Question.max_num_images %>
+                <div class="choice-image-form" id="choice-image-form-<%= b.index %>" >
+                  <%= b.file_field :image, accept: 'image/*', :class => "upload-button", onchange: "loadFile(event, 'choice-#{b.index}-image')" %>
+                  <%= image_tag "", id: "choice-#{b.index}-image" %>
+                </div>
+              <% end %>
+            </div>
+            <div class="small-6 medium-4 large-4 columns"></div>
+          </div>
+        <% end %>
+    </div>
+  </div>
+  <p>
+    <%= f.submit "Update question"%>
+  </p>
+
+<% end %>
+
+<!-- some js ported from summary in campaigns -->
+<script>
+
+  $question = $("#admin-question-edit");
+  // could also use session var, but this is simpler code
+  if ($question.find(".checkbox").prop("checked")){
+    $question.find(".choice-form").slice(<%= Question.max_num_images %>).hide(); // show only first two choices (and default show images)
+  }
+  else{
+    $question.find(".choice-form").slice(0,<%= Question.max_num_images %>).each(function(){
+      $(this).find(".choice-image-form").hide(); // hide images (and default all choices) 
+    });
+  }
+
+  // Update the images displayed below the choices
+  function loadFile(event,selector) {
+    var output = document.getElementById(selector);
+    var img_cached_file = event.target.files[0];
+    if (img_cached_file != undefined){
+      output.src = URL.createObjectURL(img_cached_file);
+    }
+    else{
+      // Unlike in profile editing page, just display blank image
+      output.src = ""
+    }
+  };
+
+  function toggleImageUpload(){
+    $question = $("#admin-question-edit");
+    $choices = $question.find(".choice-form");
+    $choices.each(function(index,el){
+      $choice = $(el);
+      // For choices above two toggle entire choice
+      if (index > 1){
+        $choice.toggle("slow");
+      }
+      // Otherwise, toggle just the file upload
+      else{
+        $choice.find(".choice-image-form").toggle("slow");
+      }
+    });
+  }
+
+
+</script>

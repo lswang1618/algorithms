@@ -1,0 +1,56 @@
+<%= form_for(@publisher) do |f| %>
+  <% if @publisher.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@publisher.errors.count, "error") %> prohibited this publisher from being saved:</h2>
+
+      <ul>
+      <% @publisher.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+      <%= f.label :email, :class => 'field_label' %>
+      <%= f.email_field :email, :class => 'text_field user_text_field', autofocus: true, :required => 'required', :minlength => 3, :maxlength => 40, :pattern => '[^@]+@[^@]+\.[a-zA-Z]{2,6}' %>
+    <br>
+      <%= f.label :password, "New password", :class => 'field_label' %>
+      <%= f.text_field :password, autocomplete: "off", :class => 'text_field user_text_field', :placeholder => "Leave blank if not changing", :minlength => 8, :maxlength => 40 %>
+    <br>
+      <%= f.label :name, "Name", :class => 'field_label' %>
+      <%= f.text_field :name, :class => 'text_field user_text_field', :placeholder => "Your name", :required => 'required', :minlength => 3, :maxlength => 40 %>
+    <br>
+      <%= f.label :blog_name, "Blog name", :class => 'field_label' %>
+      <%= f.text_field :blog_name, :class => 'text_field user_text_field', :placeholder => "Your blog's name", :required => 'required', :minlength => 3, :maxlength => 40 %>
+    <br>
+      <%= f.label :domain, "Blog URL", :class => 'field_label' %>
+      <%= f.text_field :domain, :class => 'text_field user_text_field', :placeholder => "Blog domain (without the 'www')".html_safe, :required => 'required', :minlength => 3, :maxlength => 40 %>
+    <br>
+      <%= f.label :category_id , "You need to select a category so your readers see the right questions:", :class => 'field_label' %>  
+      <%= f.select :category_id, @categories,
+        :prompt => "Please select a category for your blog"  %>
+    <br>
+      <%= f.label :logo %>
+      <%= f.file_field :logo, accept: 'image/*'%>
+      <%= image_tag @publisher.logo.url(:icon) %>
+    <br>
+      <%= label_tag :default_logo, "reset logo to default" %>
+      <%= check_box_tag :default_logo %>
+    <br>
+      <%= f.label :free_demographics %>
+      <%= f.check_box :free_demographics %>
+    <br>
+      <%= f.label :verified %>
+      <%= f.check_box :verified %>
+    <p>
+      <%= f.label :questions_active, "Are questions active for this publisher?" %>
+      <%= f.check_box :questions_active %>
+    </p>
+    <p>
+      <%= f.submit "Update account"%>
+    </p>
+
+<% end %>
+
+
+

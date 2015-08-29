@@ -1,0 +1,71 @@
+<div id="page">
+
+  <div class="row">
+    <div class="small-12 medium-12 large-5 columns">
+      <div class="row">
+        <div class="small-12 columns">
+          <h1> Your campaigns </h1>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="small-12 columns">
+          <% campaign_button_text = if session[:campaign].present? then 'Continue Your Campaign' else 'Start a New Campaign' end %> 
+          <%= link_to campaign_button_text, new_campaign_path, class: "yellow-button", data: {disable_with: "Loading..."} %>
+        </div>
+      </div>
+      <br><br>
+      <div class="row">
+        <div class="small-12 columns">
+          <% @campaigns.each do |campaign| %>
+            <div class="row">
+              <div class="small-12 columns dashboard-title">
+                <%= campaign.title %>
+              </div>
+            </div>
+            <div class="row">
+              <div class="small-12 columns">
+                <p> Click questions to view the responses. </p>
+              </div>
+            </div>
+            <table class="dashboard">
+              <thead>
+                <tr>
+                  <th>Question</th>
+                  <th>Total Responses</th>
+                  <th>Goal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% campaign.questions.each do |question| %>
+                  <tr>
+                    <td>
+                      <!-- The questions are shown as links that pull data via JS when clicked. -->
+                      <%= link_to question.text, question, :class => "question-table", remote: true, onclick: "setLoadingText()"%>
+                    </td>
+                    <td><%= question["count"].to_s %></td>
+                    <td><%= question["limit"].to_s %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="small-12 medium-12 large-6 columns">
+      <div id="data-display">
+        <div id ="summary_table_title"></div>
+        <div id ="data_summary_table">
+          <!-- <div class="bar-graph">
+            <div style="width: 22px;" class="bar"></div>
+            <div style="width: 49px;" class="bar"></div>
+            <div style="width: 28px;" class="bar"></div>
+          </div>  -->
+        </div>
+        <div id ="answers"></div>
+      </div>
+    </div>  
+  </div>
+</div>
+<%= javascript_include_tag 'dashboard', 'data-turbolinks-track' => true %>

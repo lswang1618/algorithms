@@ -1,0 +1,16 @@
+<%= render 'layouts/email_template_top' %>
+			<h1>Welcome to hellotoken.</h1>
+		</div>
+		<div class="main_text">
+			<p>Hi <%= @email %>,</p>
+			<p>Thanks for joining our community! The first step you need to take is confirm your account through the link below:</p>
+
+			<p><%= link_to 'Confirm my hellotoken account', confirmation_url(@resource, confirmation_token: @token) %></p>
+
+			<p>Get excited! If you have any questions, feel free to reach out to me personally at 
+			<%= mail_to 'brian@hellotoken.com', 'brian@hellotoken.com' %>.</p>
+
+			<p>Cheers,<br>
+			Brian</p>
+		</div>
+<%= render 'layouts/email_template_bottom' %>

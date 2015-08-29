@@ -1,0 +1,16 @@
+try{
+
+var responses = "<%= j @question.responses.select('responses.text','responses.created_at','responses.choice_id','articles.url AS article_url').
+                      joins('LEFT JOIN articles ON responses.article_id = articles.id').order('responses.created_at').to_json.html_safe %>";
+var choices = '<%= j @question.choices.to_json.html_safe %>';
+var readers = "<%= j @question.readers.order('responses.created_at').to_json.html_safe %>";
+
+displayResponseTable("<%=j(@question.text)%>", 
+					          JSON.parse(responses), 
+                    JSON.parse(choices),
+                    JSON.parse(readers));
+}
+catch(err){
+	console.log(err)
+}
+

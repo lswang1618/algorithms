@@ -1,0 +1,60 @@
+<div class="row">
+	<div class="small-12 column">
+		<%= devise_error_messages! %>
+	</div>
+</div>
+<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+	<div class="row">
+		<div class="small-12 column">
+		  <h2><%=title%>s</h2>
+		</div>
+	</div>
+	<div class="row">
+		<div class="small-3 medium-2 large-2 columns">
+		  <div class="field">
+		    <%= f.label :email, :class => 'field_label' %>
+		  </div>
+		</div>
+		<div class="small-12 medium-10 large-10 columns">
+		  <div class="field">
+		    <%= f.email_field :email, :class => 'text_field user_text_field', autofocus: true, :placeholder => "Your email is your username.", :required => 'required', :minlength => 3, :maxlength => 40, :pattern => '[^@]+@[^@]+\.[a-zA-Z]{2,6}' %>
+		  </div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="small-3 medium-2 large-2 columns">
+		  <div class="field">
+		    <%= f.label :password, :class => 'field_label' %>
+		  </div>
+		</div>
+		<div class="small-12 medium-10 large-10 columns">
+		  <div class="field">
+		    <%= f.password_field :password, :class => 'text_field user_text_field', autocomplete: "off", :placeholder => "Enter your hellotoken password.", :required => 'required', :minlength => 8, :maxlength => 40 %>
+		  </div>
+		</div>
+	</div> 
+	<div class="row">
+		<% if devise_mapping.rememberable? -%>
+			<div class="small-12 columns">
+			    <div class="field">
+			    	<%= f.check_box :remember_me, :class => 'checkbox' %> 
+			    	<%= f.label :remember_me, :class => 'field_label' %>
+			    </div>
+			</div>
+		<% end -%>
+	</div>
+	<div class="row">
+		<div class="small-12 columns">
+		  <div class="actions">
+		  	<%= f.submit title + " Sign In", :name => nil, :class => 'submit_button' %>
+		  </div>
+		</div>
+	</div>
+	<br />
+	<div class="row">
+		<div class="small-12 columns">
+		  <%= render "devise/shared/links" %>
+		</div>
+	</div>
+<% end %>
+

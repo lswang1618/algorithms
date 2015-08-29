@@ -1,0 +1,46 @@
+<h2>Readers</h2>
+
+<div class="stats" style="display:none"> 
+  <%# takes up a lot of space, so hide for now %>
+  <ul>
+    <% @reader_stats.each do |demographic, stats| %>
+      <li>
+        <h3><%= demographic.titleize %></h3>
+        <table>
+          <tr>
+            <th>Type</th>
+            <th>Number</th>
+          </tr>
+          <% stats.each do |type, number| %>
+              <tr>
+                <td><%= type.blank? ? "unknown" : type %></td>
+                <td><%= number %></td>
+              </tr>
+          <% end %>
+        </table>
+      </li>
+    <% end %>
+  </ul>
+</div>
+
+<style>
+  .stats {
+    resize: both;
+  }
+
+  .stats h3 {
+    text-align: center;
+    font-weight: bold
+  }
+  .stats ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .stats li {
+    display: inline-block;
+  }
+</style>
+
+<%= render 'table', readers: @readers %>
+<%= link_to 'Admin', admin_path %>

@@ -1,0 +1,13 @@
+<h2>User info</h2>
+<% @use_pagination = false %>
+<%= render 'table', researchers: Array.wrap(@researcher) %>
+
+<h2>Campaigns</h2>
+<% @use_pagination = true %>
+<%= render 'campaigns/table', campaigns: @researcher.campaigns.page.per(10) %>
+
+<h2>Questions</h2>
+<%= render 'questions/table', questions: @questions.includes(:responses).page.per(10) %>
+
+<%= link_to 'Edit', edit_researcher_path(@researcher) %> | 
+<%= link_to 'All researchers', researchers_path %> | <%= link_to 'Admin home', admin_path %>

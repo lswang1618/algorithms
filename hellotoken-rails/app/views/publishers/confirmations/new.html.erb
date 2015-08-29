@@ -1,0 +1,25 @@
+<div id="page">
+  	<div class="row">
+	    <div class="small-12 columns">
+			<h2>Resend confirmation instructions</h2>
+		</div>
+	</div>
+  	<div class="row">
+	    <div class="small-12 columns">
+			<%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
+				<%= devise_error_messages! %>
+				<div class="field">
+				    <%= f.label :email, :class => 'field_label' %>
+				    <%= f.email_field :email, :class => 'text_field user_text_field', autofocus: true %>
+				</div>
+				<div><%= f.submit "Resend confirmation", :class => 'submit_button' %></div>
+			<% end %>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+	    <div class="small-12 columns">
+			<%= render "publishers/shared/links" %>
+		</div>
+	</div>
+</div>

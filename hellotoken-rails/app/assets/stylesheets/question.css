@@ -1,0 +1,252 @@
+/*h3 #thanks{
+  text-align:center;
+  padding-top: 50px;
+}
+*/
+#page {
+  /*width: 70%;*/
+  /*width: 960px;*/
+  /*min-width: 960px;*/
+  margin: 35px auto 50px;
+  /*padding: 0 20px;*/
+  color: #aaa;
+}
+#page .content {
+  /*width: 960px;*/
+  /*min-width: 960px;*/
+  margin: 70px 0;
+  width: 100%;
+}
+
+#page h1 {
+  font-size: 40px;
+  /*font-family: sans-serif !important;*/
+}
+
+#page h3 {
+  font-size: 26px;
+}
+
+#page p {
+  /*font-size: 18px;*/
+}
+
+#page a {
+  line-height: 1.4em;
+}
+
+#page .field {
+  /*display: inline;*/
+  position: relative;
+  margin-top: 0px;
+  margin-bottom: 15px;
+}
+
+#page .field_label {
+  font-size: 18px;
+  display: inline;
+  vertical-align: top;
+}
+
+#page .number_field, #page .number_field_summary, #page .text_field, #page .text_field2, #page .text_field3 {
+  width: 100px;/*10%;*/
+  border: none !important;
+  box-shadow: none !important;
+  border-bottom: 1px solid #aaa !important;
+  text-align: center;
+  display: inline-block;
+  /*position: absolute;*/
+  /*left: 250px;*/
+  font-size: 18px;
+  height: 30px;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-bottom: 0;
+  padding-top: 0;
+  padding-left: 20px;
+}
+
+#page .number_field_summary {
+  position: relative;
+  left: 0;
+}
+
+#page .text_field, #page .text_field3 {
+  text-align: left;
+  width: 100%; /* 850px; */
+  left: 110px; /*12%;*/
+  border: none !important;
+  box-shadow: none !important;
+  border-bottom: 1px solid #aaa !important;
+}
+
+#page .text_field.user_text_field {
+  width: 100%;
+  max-width: 345px;
+  left: 100px;
+  /*text-align: center;*/
+  padding-left: 3px;
+}
+
+#page .text_field.user_text_field_pw {
+  width: 395px;
+  left: 250px;
+  /*text-align: center;*/
+  padding-left: 3px;
+}
+
+#page .text_field2 {
+  text-align: left;
+  width: 100%; /*316px;*/
+  left: 0;
+  margin: 3px 0px;
+  padding-left: 5px;
+  position: relative;
+  border: none !important;
+  box-shadow: none !important;
+  border: 1px solid #aaa !important;
+}
+
+#page .text_field3 {
+  padding-left: 0;
+}
+
+#page h1 .text_field3 {
+  font-size: 40px;
+  /*line-height: 1em;*/
+  height: 50px;
+  padding: 0;
+  margin: 0;
+  background-color: #fbfbfb;
+}
+
+#page .checkbox {
+  width: 25px;
+  height: 25px;
+  border-radius: 0px !important;
+  background: white !important;
+}
+
+#page .submit_button {
+  border: none !important;
+  box-shadow: none;
+  background: #FFBF3F;
+  color: white;
+  font-size: 18px;
+  padding: 15px 50px;
+  margin-top: 10px;
+}
+
+#page .submit_button:hover {
+  opacity: 0.9;
+}
+
+.toggle_button, .toggle_button:focus, .toggle_button_small, .toggle_button_small:focus {
+  display: inline-block;
+  opacity: 0.8;
+
+  font-size: 0.7em;
+  color: #FFBF3F;
+  /*font-weight: bold;*/
+
+  border: 1px solid #FFBF3F;
+  background-color: #fff;
+  border-radius: 2px;
+
+  margin-top: -7px;
+  /*padding: 0 20px;*/
+  width: 1.5em;
+  /*height: 0em;*/
+  vertical-align: middle;
+  text-align: center;
+}
+
+.toggle_button:hover, .toggle_button_small:hover {
+  color: white;
+  border: 1px solid #FFBF3F;
+  background-color: #FFBF3F; 
+  opacity: 0.5;
+}
+
+.toggle_button_small, .toggle_button_small:focus {
+  font-size: 1em;
+  margin-top: 0;
+}
+
+.campaign_targeting p {
+  font-size: 18px;
+  color: #4d4d4d;
+  vertical-align: top;
+}
+
+/*Make sub option checkboxes and text smaller*/
+/*Tried many variations and none of these worked*/
+/*.campaign_targeting .allchoices {
+  width: 25px;
+  height: 25px;
+}
+
+.allchoices {
+  font-size: 40px !important;
+}*/
+
+
+/*Format demographics options on campaign creation*/
+#gender_options, #age_range {
+  margin-left: 39px;
+  display: block;
+  color: black;
+  /*font-style: italic;*/
+  vertical-align: middle;
+}
+
+#category_options {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+#campaign_alert {
+  display: none;
+}
+
+#campaign-form{
+  // display: none;
+}
+
+.campaign-form-page{
+  display: none;
+}
+
+.campaign-form-page-selector{
+  display: none; // overridden when page loads  
+}
+
+.campaign-form-page-selector input[type="radio"] + label{
+  color: rgb(255, 191, 63);
+  padding: 5px 15px;
+  // font-weight: bold;
+  font-size: 1em;
+  margin: 0 15px 20px 0;
+  border-radius: 3px;
+  border: solid 1px rgb(255, 191, 63);
+}
+
+.campaign-form-page-selector input[type="radio"] + label:hover {
+  color: white;
+  background: rgba(255, 191, 63, 0.9);
+  border: solid 1px rgba(255, 191, 63, 0.7);  
+}
+
+
+
+.campaign-form-page-selector input[type="radio"] + label.selected {
+  color: white;
+  background: rgba(255, 191, 63, 0.61);
+  border: solid 1px rgba(255, 191, 63, 0.1);
+}
+
+.campaign-form-page-selector input[type="radio"] {
+  display: none;
+}
+
+// input[type="file"], input[type="checkbox"], select

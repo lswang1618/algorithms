@@ -1,0 +1,195 @@
+<% total_views = rand(10000..30000) %>
+<% rev_per_view = 0.03 %>
+<% total_earnings = rev_per_view*total_views %>
+<% paid_amount = rand((total_earnings/100-1.5)..(total_earnings/100)).floor*100 %>
+<% unpaid_amount = total_earnings - paid_amount %>
+<% minimum_payment = 100 %>
+<!-- Should be a width of 100%, but doing 99% in case rounding error so it doesn't occupy 2 lines -->
+<% full_bar_width = 99 %>
+<% unpaid_bar_width = unpaid_amount / minimum_payment * full_bar_width %>
+<% background_bar_width = (minimum_payment - unpaid_amount) / minimum_payment * full_bar_width %>
+<% views = rand(0..5000) %>
+<% revperview = 0.03 %>
+<% total = revperview*views %>
+<% number_of_articles = 5 %>
+
+<div id="page" class="dashboard">
+  <div class="row">
+    <div class="small-12 columns">
+      <h1> Demo dashboard </h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-12 columns">
+      <p> Thanks for confirming your account! For the next step, we’re trying to meet all the potential bloggers on our platform; we’ll be in touch via email. You can speed up the process by filling in your blog  
+      <%= link_to "details", edit_publisher_registration_path %>.
+      If there's a fit, we’ll add you to our community. Feel free to 
+      <%= mail_to "support@hellotoken.com", "email us" %>
+      directly if you have any questions. 
+        
+
+      </p>
+      <p> Your dashboard will show you how you're earning money with hellotoken. What you see below is a demo.</p>
+      <hr>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-12 medium-6 large-5 columns">
+      <div class="row">
+        <!-- Show table with total earnings from all hellotoken activity -->
+        <div class="small-12 columns">
+          <div class="row">
+            <div class="small-12 columns dashboard-title">
+              Total earnings
+            </div>
+          </div>
+          <table class="dashboard">
+            <thead>
+              <tr>
+                <th>Paid views</th>
+                <th>$ / paid view</th>
+                <th>Earnings</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <%= number_with_delimiter(total_views).to_s %>
+                </td>
+                <td>
+                  <%= number_to_currency(rev_per_view, format: "%u %n").to_s %> <!-- &#162; -->
+                </td>
+                <td>
+                  <%= number_to_currency(total_earnings, format: "%u %n").to_s %>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Show paid out amount. -->
+        <div class="small-12 columns">
+          <p class="dashboard">
+            You have been paid <%= number_to_currency(paid_amount, format: "%u %n").to_s %>. 
+            <br>You have <%= number_to_currency(unpaid_amount, format: "%u %n").to_s %> in your account.
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Show amount to be paid once minimum is reached. -->
+        <div class="small-12 columns">
+          <% if unpaid_amount < minimum_payment %>
+            <div style="width:<%=unpaid_bar_width%>%;" class="bar-thick-no-space"></div>
+            <div style="width:<%=background_bar_width%>%;" class="bar-background"></div>
+            <p>
+              <%= number_to_currency(minimum_payment-unpaid_amount, format: "%u %n").to_s %> to go before your next minimum.
+            </p>
+          <% else %>
+            <%= link_to "Get paid "+number_to_currency(unpaid_amount, format: "%u %n").to_s, dashboard_path, class: "yellow-button" %>
+            <br><br>
+          <% end %>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <!-- Earnings for a selected amount of time. -->
+        <div class="small-12 columns">
+          <div class="row">
+            <div class="small-12 columns dashboard-title">
+              Earnings from the past 30 days
+            </div>
+          </div>
+          <table class="dashboard">
+            <thead>
+              <tr>
+                <th>Paid views</th>
+                <th>$ / paid view</th>
+                <th>Earnings</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%# @article.each do |article| %>
+                <tr>
+                  <td>
+                    <%= number_with_delimiter(views).to_s %>
+                    <!-- The questions are shown as links that pull data via JS when clicked. -->
+                    <%#= link_to article.text, '#', :onclick=>"displayResponseTable('"+j(article.text)+"', JSON.parse('"+j(article.responses.to_json)+"'), JSON.parse('"+j(article.choices.to_json)+"'))", :class => "question-table"%>
+                  </td>
+                  <td>
+                    <%= number_to_currency(revperview, format: "%u %n").to_s %> <!-- &#162; -->
+                    <%#= article["count"].to_s %>
+                  </td>
+                  <td>
+                    <%= number_to_currency(total, format: "%u %n").to_s %>
+                    <%#= article["limit"].to_s %>
+                  </td>
+                </tr>
+              <%# end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+<!--       <div class="row">
+        <div class="small-12 columns">
+          <br><br>    
+          <%#= link_to "Plugin Instructions", "http://demo.hellotoken.com/?p=10", class: "yellow-button" %>
+        </div>
+      </div> -->
+    </div>
+    <div class="small-12 medium-6 large-6 columns">
+      <div class="row">
+        <!-- Show table with earnings for top blog articles -->
+        <div class="small-12 columns">
+          <div class="row">
+            <div class="small-12 columns dashboard-title">
+              Your top earning articles
+            </div>
+          </div>
+          <table class="dashboard">
+            <thead>
+              <tr>
+                <th>Article</th>
+                <th>Paid views</th>
+                <th>Earnings</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% (1 .. number_of_articles).reverse_each do |i| %>
+                <% article_views = rand((400*i)..(500*i)) %>
+                <% article_bar_width = (article_views.to_f / total_views.to_f * 800).round(0) %>
+                <% article_url = "http://demo.hellotoken.com/?p=1" %>
+                <% uri = URI(article_url) %>
+                <tr>
+                  <td>
+                    <%= link_to uri.host.to_s+uri.path.to_s+uri.query.to_s+uri.fragment.to_s, article_url %>
+                  </td>
+                  <td>
+                    <%= article_views.to_s %>
+                    <br>
+                    <div style="width:<%=article_bar_width%>%;" class="bar background-red"></div>
+                  </td>
+                  <td>
+                    <%= number_to_currency(article_views*rev_per_view, format: "%u %n").to_s %>
+                  </td>
+                </tr>
+              <% end %>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id ="summary_table_title"></div>
+      <div id ="data_summary_table">
+        <!-- <div class="bar-graph">
+          <div style="width: 22px;" class="bar"></div>
+          <div style="width: 49px;" class="bar"></div>
+          <div style="width: 28px;" class="bar"></div>
+        </div>  -->
+      </div>
+      <div id ="answers"></div>
+    </div>  
+  </div>
+
+</div>
+<%#= javascript_include_tag 'dashboard', 'data-turbolinks-track' => true %>

@@ -1,0 +1,30 @@
+<div class="admin-table" id="admin-table-articles">
+  <%= render "layouts/paginate", resources: articles %>
+  
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>URL</th>
+      <th>Path</th>
+      <th>Domain</th>
+      <th>Publisher</th>
+      <th>Num Visits</th>
+      <th>Num Responses</th>
+      <th>Num Moneyed Responses</th>
+      <th>Last Visit</th>      
+    </tr>
+    <% articles.each do |article| %>
+      <tr>
+        <td><%= link_to article.id, article %></td>
+        <td><%= link_to article.url, "http://"+article.url, target: "_blank" %></td>
+        <td><%= article.path %></td>
+        <td><%= article.domain %></td>
+        <td><%= article.publisher_id.present? ? link_to(article.publisher.email, article.publisher) : "Unassociated" %></td>
+        <td><%= article.visits %></td>
+        <td><%= article.responses.size %></td>
+        <td><%= article.money_responses.size %></td>
+        <td><%= article.updated_at %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>

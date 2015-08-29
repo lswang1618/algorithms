@@ -1,0 +1,70 @@
+/* Styles needed for publisher dashboard */
+
+/*Dashboard page styles*/
+
+.dashboard p {
+  font-size: 1em;
+}
+
+/*Dashboard table styles*/
+.dashboard table td {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  /*white-space: nowrap;*/
+}
+
+/*Set dashboard title text to look same as table caption*/
+.dashboard-title, .dashboard-title-2, table caption {
+  text-align:left;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: #FFBF3F !important;
+  font-size: 1.3rem !important;
+  font-weight: bold;
+}
+
+/*Make dashboard tables 100% in width*/
+table.dashboard {
+  width: 100%;
+}
+
+/*Add padding to section at top of right hand side page to match the page title and set full width*/
+.data, .data-summary {
+  margin-top: 16px;
+  width: 100%;
+}
+
+.question-table:active, .question-table:focus {
+  color: #FFBF3F;
+}
+
+/*Horizontal bar to create graph in CSS*/
+
+.bar-graph {
+    width: 76px;
+    height: 54px;
+    background-color: #eaeaea;
+    padding: 2px;
+}
+.bar, .bar-thick-no-space {
+    height: 10px;
+    width: 0px;
+    margin: 1px 5px 1px 1px;
+    display: inline-block;
+    position: relative;
+    background-color: #12c99c;
+    vertical-align: baseline;
+}
+.bar-thick-no-space, .bar-background {
+    height: 25px;
+    margin: 0;
+    padding: 0;
+}
+.bar-background {
+    width: 0;
+    background-color: #eaeaea;
+    display: inline-block;
+    margin: 0 0 0 -5px;
+}

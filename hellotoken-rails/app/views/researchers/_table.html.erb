@@ -1,0 +1,34 @@
+<div class="admin-table" id="admin-table-researchers">
+  <%= render "layouts/paginate", resources: researchers %>
+
+  <table>
+    <tr>
+      <th>Email</th>
+      <th>Name</th>
+      <th>Company</th>
+      <th>Website</th>
+      <th>Verified</th>
+      <th>Created at</th>
+      <th>Last sign in</th>
+      <th>Logo</th>
+    </tr>
+      <% researchers.each do |researcher| %>
+        <tr>
+          <td><%= link_to researcher.email, researcher %><%= if researcher.admin then " [A]" end %></td>
+          <td><%= researcher.name %></td>
+          <td><%= researcher.company_name %></td>
+          <td><%= researcher.website %></td>
+          <td style="color:<%= if researcher.verified? then "green" else "red" end%>"><%= researcher.verified? %></td>
+          <td><%= researcher.created_at %></td>
+          <td><%= researcher.last_sign_in_at %></td>
+          <td>
+            <% if researcher.use_custom_colors %>
+            <a href=<%=researcher.get_website %> target="_blank" style="color:<%=researcher.get_text_color%>; background:<%=researcher.get_background_color%>"><%= researcher.get_sponsor_text %></a>
+            <% else %>
+              Custom logo off
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+  </table>
+</div>

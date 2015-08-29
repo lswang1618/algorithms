@@ -1,0 +1,38 @@
+<div class="admin-table" id="admin-table-readers">
+  <%= render "layouts/paginate", resources: readers %>
+  
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Gender</th>
+      <th>Age</th>
+      <th>City</th>
+      <th>Region</th>
+      <th>Country</th>
+      <th>Initial Page</th>
+      <th>Last Page</th>
+      <th>Initial IP</th>
+      <th>Last IP</th>
+      <th>Num Responses</th>
+      <th>Updated At</th>
+      <th>Created At</th>
+    </tr>
+    <% readers.each do |reader| %>
+      <tr>
+        <td><%= link_to reader.id, reader %></td>
+        <td><%= reader.gender %></td>
+        <td><%= reader.age %></td>
+        <td><%= reader.city %></td>
+        <td><%= reader.region %></td>
+        <td><%= reader.country %></td>
+        <td><%= reader.initial_page %></td>
+        <td><%= reader.last_page %></td>
+        <td><%= reader.initial_ip %></td>
+        <td><%= reader.last_ip %></td>
+        <td><%= reader.responses.size %></td>
+        <td><%= reader.updated_at %></td>
+        <td><%= reader.created_at %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>

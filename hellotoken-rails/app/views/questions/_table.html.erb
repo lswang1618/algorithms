@@ -1,0 +1,28 @@
+<div class="admin-table" id="admin-table-questions">
+  <%= render "layouts/paginate", resources: questions %>
+  
+  <table>
+    <tr>
+      <th>Text</th>
+      <th>Campaign</th>
+      <th>Num resp</th>
+      <th>Limit</th>
+      <th>Demographic</th>
+      <th>Choices</th>
+      <th>Test</th>
+      <th>Researcher</th>      
+    </tr>
+    <% questions.each do |question| %>
+      <tr>
+        <td><%= link_to question.text, question %></td>
+        <td><%= question.campaign_id.blank? ? "unaffiliated" : question.campaign.title %></td>
+        <td><%= question.responses.size %></td>
+        <td style="color:<%= if question.over then "green" else "red" end%>"><%= question.limit %></td>
+        <td><%= if question.demographic.present? then question.demographic else "none" end %></td>
+        <td><%= if question.multiple_choice then question.choices.pluck(:text) else "not m.c." end %></td>
+        <td><%= question.test %></td>
+        <td><%= question.campaign_id.blank? ? "unaffiliated" : link_to(question.campaign.researcher.email, question.campaign.researcher) %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>

@@ -1,0 +1,38 @@
+<div class="admin-table" id="admin-table-campaigns">
+  <%= render "layouts/paginate", resources: campaigns %>
+  
+  <table>
+    <tr>
+      <th>Title</th>
+      <th>Num resp</th>
+      <th>Limit</th>
+      <th>Cost</th>
+      <th>Taxes</th>
+      <th>(target) gender?</th>
+      <th>male?</th>
+      <th>female?</th>
+      <th>other?</th>
+      <th>age?</th>
+      <th>Low age</th>
+      <th>Up age</th>
+      <th>Created at</th>
+    </tr>
+    <% campaigns.each do |campaign| %>
+      <tr>
+        <td><%= link_to campaign.title, campaign %></td>
+        <td><%= campaign.responses.size %></td>
+        <td style="color:<%= if campaign.complete then "green" else "red" end%>"><%= campaign.limit %></td>
+        <td><%= number_to_currency campaign.cost %></td>
+        <td><%= number_to_currency campaign.taxes %></td>
+        <td><%= campaign.target_gender %></td>
+        <td><%= campaign.target_male %></td>
+        <td><%= campaign.target_female %></td>
+        <td><%= campaign.target_other %></td>
+        <td><%= campaign.target_age %></td>
+        <td><%= campaign.age_range_lower %></td>
+        <td><%= campaign.age_range_upper %></td>
+        <td><%= campaign.created_at %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>

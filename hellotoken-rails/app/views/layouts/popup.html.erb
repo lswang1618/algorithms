@@ -1,0 +1,332 @@
+<html lang="en">
+<head>
+    <!--script> document.domain = "www.hellotoken.com" </script-->
+    <meta name="viewport" content="width=device-width"/>
+    <%= javascript_include_tag 'jquery.min', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'mixpanel.min', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'popup', 'data-turbolinks-track' => true %>
+    <%= stylesheet_link_tag 'ht-style', media: 'all', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %> <!-- Used for the authenticity token in ajax requests -->
+</head>
+<body>
+<%= yield %>
+<script>
+
+    window.mobileCheck = (function()
+    {
+        var check = false;
+
+        (function(a)
+        {
+            if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4)))
+                check = true
+        })(navigator.userAgent||navigator.vendor||window.opera);
+
+        return check;
+    })();
+
+    var scripts = document.getElementsByTagName('script'),
+        url = scripts[scripts.length - 1].getAttribute('src'),
+        head = document.getElementsByTagName('head')[0],
+        css = [ 
+            "<%= stylesheet_path('mobile') %>"
+        ];
+
+    for(var i in css)
+    {
+        if (i == 0 && !mobileCheck)
+            continue;
+
+        var link = document.createElement('link');
+        link.setAttribute('href', css[i]);
+        link.setAttribute('rel', 'stylesheet');
+        link.setAttribute('type', 'text/css');
+        //link.setAttribute('media', '(max-width: 420px)');
+        head.appendChild(link);
+    }
+
+    // almost all js code migrated to ruby instead; delete in future
+
+    /** 
+     * A stopgap function to log things in the production log.
+     * Mainly being used to figure out why the plugin might not be loading.
+     */
+    // function logInRails(data){
+    //     $.ajax({
+    //         url: "/popup/log",
+    //         method: "POST",
+    //         data: data,
+    //         error: function(data){
+    //             console.log("HT: Dumping data");
+    //             console.log(data)
+    //         }
+    //     })
+    // }
+
+    /**
+     * A function to "submit" questions, which involves
+     * 1. Submitting the answer to the database, so it can be saved.
+     * 2. Posting that a question has been answered to the handling iframe.
+     * win might be deleteable--not sure--and question_aid is the alpha_id
+     */
+    // function questionSubmit(win, question, reader_id, choice_id, answer_text){      
+    //     if (answer_text.length>0){
+                        
+    //         // Remove the dialog box...inside the iframe...inside the dialog box
+    //         $('#ht-dialog').fadeOut();
+
+    //         // If it's a real question i.e. we want to save answers
+    //         if (question.test !== true){
+    //             // Submit by ajax to the database
+    //             $.ajax({
+    //                 url: "/responses",
+    //                 method: "POST",
+    //                 beforeSend: function(xhr) { 
+    //                     xhr.setRequestHeader('X-CSRF-Token', AUTH_TOKEN) 
+    //                 },
+    //                 data:{                     
+    //                     "response":{
+    //                         "text": answer_text,
+    //                         "question_id": question.id,
+    //                         "choice_id": choice_id,
+    //                         "article": document.referrer,
+    //                         "reader_id": reader_id
+    //                     }
+    //                 },
+    //                 // All is good
+    //                 success: function(data){
+    //                     // Post message to iframe
+    //                     w.parent.postMessage("answer "+question.alpha_id, document.referrer);
+    //                 },
+    //                 // Bad :(
+    //                 error: function(data){
+    //                     // alert("There was an error with the plugin. We apologize.");
+    //                     w.parent.postMessage("close no pass", document.referrer);
+    //                     logInRails({
+    //                         "msg": "BREAKING ERROR IN POPUP",
+    //                         "status": data.status,
+    //                         "statusText": data.statusText,
+    //                         "call_location": "questionSubmit"
+    //                     });
+    //                     console.log("HT: dumping data");
+    //                     console.log(data);
+    //                 }
+    //             });
+    //         }
+    //         else
+    //             w.parent.postMessage("answer "+question.alpha_id, document.referrer);
+    //     }
+    // };
+    
+    /**
+     * A function to update the reader's demographic in the database,
+     * if the question is a demographics one.
+     */
+    // function updateDemographics(reader_id, demographics){
+    //     $.ajax({
+    //         url: "/readers/"+reader_id,
+    //         method: "PUT",
+    //         dataType: "JSON",
+    //         beforeSend: function(xhr) { 
+    //             xhr.setRequestHeader('X-CSRF-Token', AUTH_TOKEN) 
+    //         },
+    //         data:{        
+    //             "reader": demographics
+    //         },
+    //         error: function(data){
+    //             w.parent.postMessage("close no pass", document.referrer);
+    //             logInRails({
+    //                 "msg": "BREAKING ERROR IN POPUP",
+    //                 "call_location": "updateDemographics"
+    //             });
+    //             console.log("HT: dumping data: ");
+    //             console.log(data);
+    //         }
+    //     });
+    //     mixpanel.people.set_once(demographics);
+    // };
+
+    // Some useful variables 
+    // w = this;
+    // var articlePasses = false;
+    // Works everywhere except...Real Mr. Housewives :(
+    // var AUTH_TOKEN = "<%=j form_authenticity_token %>"
+    // // What kind of popup are we serving? Mainly used for demos now
+    // var pluginMode = "<%= params['mode'] %>"
+    // Get ready!
+    var ready;
+    
+    // Load functions on page load.
+    ready = function() {
+
+    //     // Special case graphics. To be removed later.
+    //     if(document.referrer.indexOf("turkish.com")>=0 && mobileCheck) {
+    //         $("body").css('zoom', '2');
+    //         $("body").css('-webkit-text-size-adjust', '200%');
+    //     }
+
+    //     if (document.referrer.indexOf("harvardpolitics.com")>=0){
+    //         $("#ht-dialog .htQuestion").css("color", "D90000");
+    //         $(".ht-logo").css('background-image', "url('/images/HPR-HT.png')");
+    //         $(".ht-logo").css('width', "150px");
+    //     }
+
+        // Listen for errors and report appropriately
+        window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
+            // alert("There was an error with the plugin. We apologize.");
+            w.parent.postMessage("close no pass", document.referrer);
+            // logInRails({
+            //     "msg": "BREAKING ERROR IN POPUP", 
+            //     "error": errorMsg, 
+            //     "url": url, 
+            //     "lineNumber": lineNumber
+            // });
+        }
+    
+        // Close the dialog and post a message if user clicks 'x' button
+        $('#ht-dialog .close').on('click', function() {
+            w.parent.postMessage("close", document.referrer)
+        });
+    
+        // Thank users for visiting sponsor.
+        $('#ht-sponsor_link').on('click', function() {
+            console.log("HT: Thanks for visiting our sponsor!");
+        });
+
+    //     // Hide initially; will show later if questions are successfully loaded.
+    //     $('#ht-dialog').hide();
+
+    //     // See if a reader exists and submit the finding to the database
+    //     var reader_id = JSON.parse(w.getCookie('ht-user'));
+    //     if (reader_id == false) reader_id = "";
+
+    //     // A neat trick to get the hostname and pathname
+    //     var referrerUrl = document.createElement('a');
+    //     referrerUrl.href = document.referrer;
+
+    //     // The ajax call to both udpate reader and load questions
+    //     $.ajax({
+    //         url: "/popup/visit",
+    //         method: "POST",
+    //         beforeSend: function(xhr) { 
+    //             xhr.setRequestHeader('X-CSRF-Token', AUTH_TOKEN) 
+    //         },
+    //         data: {
+    //             "clientID": $.urlParam('clientID'),
+    //             "mode": pluginMode,
+    //             "article": {"url": document.referrer, 
+    //                         "domain": referrerUrl.hostname.split(".").slice(-2).join("."), 
+    //                         "path": referrerUrl.pathname},
+    //             "reader": {"alpha_id": reader_id},
+    //         },
+    //         dataType: 'json',
+    //         error: function(data){
+    //             w.parent.postMessage("close no pass", document.referrer);
+    //             logInRails({
+    //                 "msg": "BREAKING ERROR IN POPUP",
+    //                 "status": data.status,
+    //                 "statusText": data.statusText,
+    //                 "call_location": "popup/visit"
+    //             });
+    //             console.log("HT: Dumping data: ");
+    //             console.log(data);
+    //         },
+    //         success: function(data){
+    //             // Alias the reader; redundant for recurring readers, but only way
+    //             // to handle users with ht cookie already set but mixpanel not set                
+    //             // mixpanel.alias(data.reader.alpha_id);
+    //             // Add to user profile if not set before
+    //             // mixpanel.people.set_once({
+    //             //     "First Page Visited": referrerUrl.pathname,
+    //             //     "First Publisher Visited": referrerUrl.hostname,
+    //             //     "First Time Seen": new Date().toISOString(),
+    //             //     "Type": "Reader"
+    //             // });
+    //             // mixpanel.identify(data.reader.alpha_id);
+
+
+    //             // If no questions were loaded, or no data at all, OR AB testing by hours
+    //             // just close without redirect.
+    //             // AB testing off right now
+    //             if ((false && new Date().getUTCHours() % 2 == 1 && pluginMode !== "demo" && referrerUrl.hostname !== "demo.hellotoken.com") 
+    //                 || data.question == undefined || data.question == null || !data.question){
+    //                 w.parent.postMessage("close no pass", document.referrer);
+    //                 // If reader didn't exist before or had an outdated cookie, store a cookie and alias the ID
+    //                 // done inside if statement and after posstmessage so that message is posted ASAP
+    //                 if (reader_id !== "" && data.reader != null){
+    //                     w.setCookie('ht-user', JSON.stringify(data.reader.alpha_id), 365);
+    //                 }
+    //             }
+    //             else{
+    //                 // Otherwise load the question and show the dialog
+    //                 var question = data.question;
+    //                 // Post message to plugin, along with data about question and reader ids
+    //                 w.parent.postMessage("question " + 
+    //                     JSON.stringify({"question": {"alpha_id": question.alpha_id}, 
+    //                                     "reader": {"alpha_id": data.reader.alpha_id}}), 
+    //                     document.referrer);
+
+    //                 // store cookies; inside if-statement for same reason as above 
+    //                 if (reader_id !== ""){
+    //                     w.setCookie('ht-user', JSON.stringify(data.reader.alpha_id), 365);
+    //                 }
+    //                 // Save here for use later
+    //                 var reader_id = data.reader.id;
+    //                 $('#ht-dialog').show();
+    //                 $("#question_label").text(question.text);
+    //                 // If question is not multiple choice (i.e. fill-in-the-blank)
+    //                 // Handle submissions and divs (label and text field) creation appropriately
+    //                 if (!question.multiple_choice){
+    //                     $("#question-enter").click(function(event){
+    //                         var choice_id = -1;
+    //                         var answer_text = $(".ht-question".val());
+    //                         questionSubmit(w, question, reader_id, choice_id, answer_text);
+    //                         // If the question is a demographic one, update the reader
+    //                         if (question.demographic != null){
+    //                             demographic_JSON = {};
+    //                             demographic_JSON[question.demographic] = answer_text;
+    //                             updateDemographics(reader_id, demographic_JSON);
+    //                         }
+    //                     });          
+    //                 }
+    //                 // otherwise, if it is multiple choice
+    //                 else{
+    //                     // Handle submissions and divs (label and buttons) creation appropriately
+    //                     var choices = data.choices;
+    //                     $("#ht_question").hide();
+    //                     $("#question-enter").hide();
+    //                     var answers = "";
+    //                     var choice_number = 0;
+    //                     choices.forEach(function(choice){
+    //                         if (document.referrer.indexOf("harvardpolitics.com")>=0){
+    //                             answers = answers.concat('<input type="button" class="question-submit" id="question-submit" name='+choice_number+' style="color: #D90000; border-color: #D90000;" value="'+ choice.text.toUpperCase() +'">'+'<br>');
+    //                         }
+    //                         else{
+    //                             answers = answers.concat('<input type="button" class="question-submit" id="question-submit" name='+choice_number+' value="'+ choice.text.toUpperCase() +'">'+'<br>');
+    //                         }
+    //                         choice_number++;
+    //                     });
+    //                     $("#ht_choice").append(answers);
+    //                     $("input.question-submit").click(function(event){
+    //                         var choice_id = choices[parseInt(event.currentTarget.name)].id;
+    //                         var choice_text = event.currentTarget.value;
+    //                         questionSubmit(w, question, reader_id, choice_id, choice_text);
+    //                         // Same as above
+    //                         if (question.demographic != null){
+    //                             demographic_JSON = {};
+    //                             demographic_JSON[question.demographic] = choice_text;
+    //                             updateDemographics(reader_id, demographic_JSON);
+    //                         }
+    //                     });  
+    //                 }
+    //             }
+    //         }
+    //     });
+    };
+
+    $(document).ready(ready);
+    $(document).on('page:load', ready);
+
+  </script>
+</body>
+</html>

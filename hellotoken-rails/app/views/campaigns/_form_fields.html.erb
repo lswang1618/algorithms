@@ -1,0 +1,116 @@
+<!-- 
+  A hot fix to get the radio page selector working
+  You should def rearrange these page divs into partials/nicer divs
+-->
+<div class="campaign-form-page" id="campaign-form-page-campaign">
+  <div class="row">
+    <div class="small-12 large-8 columns">
+      <h1><%= f.text_field :title, :class => 'text_field3', :placeholder => "Your campaign name", :autofocus => true, :maxlength => 30, novalidate: true %></h1>
+    </div>
+  </div>
+  <br>
+
+  <div class="field">
+    <div class="row">
+      <div class="small-7 medium-6 large-5 columns">
+        <%= f.label :limit, "Number of respondents per question:", :class => 'field_label', for: "number_respondents" %>
+      </div>
+      <div class="small-5 medium-6 large-7 columns">
+        <%= f.number_field :limit, :value => (session['campaign'].present? ? session['campaign']['number_respondents']:100), :min => 1, :class => 'number_field', :id => 'number_respondents' %>
+      </div>
+    </div>
+  </div>
+
+  <!--Not part of the form helper, in that it won't actually get sent to model;
+      use this to dynamically generate the right number of questions below
+    -->
+  <div class="field">
+    <div class="row">
+      <div class="small-7 medium-6 large-5 columns">
+        <%= label_tag :number_questions, "Number of questions:", :class => 'field_label' %>
+      </div>
+      <div class="small-5 medium-6 large-7 columns">
+        <%= number_field_tag :number_questions, (session['campaign'].present? ? session['campaign']['number_questions']:1), :min => 1, :max => Campaign.max_num_questions, :class => 'number_field', id: 'number_questions', novalidate: true %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <p>(Base of <%=(Campaign.prices[:base] * 100).to_i %>&#162; per response.)</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+        <%= render 'targeting_info', f: f %>
+    </div>
+  </div>
+  <br>
+</div>
+
+<div class="campaign-form-page" id="campaign-form-page-questions">
+  <div class="row">
+    <div class="small-12 columns">
+      <h1>Question details</h1>
+    </div>
+  </div>
+  <!--=================LOOK HERE==================-->
+  <!--Moved the question_info page out of a separate page to this one page form
+      This could also be in _form.html.erb, below the render of _form_fields,
+      but I thought it made more sense coming after the number of questions
+      selection, since you could see the div names above. 
+      You can move this if you want to either _form or new.
+    -->
+  <div class="row">
+    <div class="small-12 columns">
+      <%# Number of forms generated is based on number of associated questions to campaign 
+           We use the "build" command in #new method to fake empty questions %>
+     <!--
+       Added a wrapper div to get the question hiding working 
+       Change the class and id if you want, but
+       updateNumQuestions() function also needs to be updated
+     -->
+      <%= f.fields_for :questions do |questions_form| %>
+        <div class="question-form" id="question-form-<%=questions_form.index%>">
+          <%= render 'questions/form', f: questions_form %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <br>
+  <!-- quickfix, needs some styling -->
+  <%= link_to "Need help writing?", bestpractices_path, target: "_blank", class: "help-link" %>
+</div>
+
+<!--
+  Tried as best as I could do to reproduce your partial structure
+  while getting rid of the no longer necessary stuff.
+  You can still find all the old code in the questions/ folder.
+  Let me know if you want it a different way.
+  Mainly I just moved _summary_form into _summary 
+  (the latter now in the campaigns folder), and deleted most of
+  what used to be in _summary (when it was in the questions folder)
+-->
+
+<div class="campaign-form-page" id="campaign-form-page-summary">
+  <div class="row">
+    <div class="small-12 columns">
+      <h1>Summary and payment</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-12 columns">
+      <%= render 'summary' %>
+    </div>
+  </div>
+
+  <div class="actions">
+    <div class="row">        
+      <div class="small-12 medium-12 large-12 columns">
+        <%= f.submit "Proceed to payment", id: 'campaign_submit_button', :class => 'submit_button' %>
+      </div>
+    </div>
+  </div>
+</div>
+

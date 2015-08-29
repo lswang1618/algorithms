@@ -1,0 +1,541 @@
+<% @tax_state = [["No Tax", 0]] %>
+<%#= form_tag questions_path, id: "campaign_payment_form" do %>
+
+  <!-- Table showing a cost summary of the campaign -->
+
+  <div class="row">
+    <div class="small-12 columns medium-padding-top">
+      <table class="minimum-width no-border box-shadow-light-grey no-table-borders inverted_table_row_colors td-width-minimum">
+        <!-- <caption>Cost breakdown</caption> -->
+        <tbody>
+          <tr>
+            <td></td>
+            <td>
+              <span id="number_respondents_calculation">
+                0
+              </span>
+              respondents
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="center-text">&#10005;</td>
+            <td class="border-bottom-grey">
+              <span id="number_questions_calculation">
+                0
+              </span>
+              questions
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              <span id="total_responses_calculation">
+                0
+              </span>
+              total responses
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="center-text">&#10005;</td>
+            <td class="border-bottom-grey">
+              $<span id="total_response_price">
+              	0.00
+              </span>
+              <span id="open_parentheses"></span>
+              <span id="base_price">
+              	<!-- 
+                filled in by JS 
+                (though it doesn't have to be, we could just pull from model here)
+                -->
+              </span>
+              <span id="category_price">
+                <!-- filled in by JS -->
+              </span>
+              <span id="gender_price">
+                <!-- filled in by JS -->
+              </span>
+              <span id="age_price">
+                <!-- filled in by JS -->
+              </span>
+              <span id="close_parentheses"></span>
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <th></th>
+            <th>
+              <!-- Total cost in $ (payment are in cents) -->
+              $<span id="cost_calculation">0</span>
+              total + 
+              <span id="taxes"></span>
+              tax
+            </th>
+            <th></th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-6 medium-3 large-3 columns">
+      <%= select_tag :tax_state, options_for_select(@tax_state), :class => "tax_selector minimum-width", :style => "display:none;", :id => "tax_state" %>
+    </div>
+  </div>
+  <span id="campaign_alert"></span>
+  
+  <script src="https://checkout.stripe.com/checkout.js"></script>
+
+  <script>
+
+    /**
+    INITIALIZERS
+    **/
+
+    /** Lots of GLOBAL VARIABLES **/
+    /**
+      Set them to 0 and assume they'll change when updated.
+      Trigger an updateSummaryTable() on initial page load
+      so that the right values will be set if nothing's there yet.
+    **/
+
+    // Set initial prices based on class attributes 
+    // then update them as table changes
+    // numbers, not strings--convert to strings later
+    var base_price = <%= Campaign.prices[:base] %>
+    var category_price = <%= Campaign.prices[:category] %>;
+    var gender_price = <%= Campaign.prices[:gender] %>;
+    var age_price = <%= Campaign.prices[:age] %>;
+
+    // Same idea with setting the initial targetting,
+    // but these are set in _targeting_info
+    // var target_categories = false;
+    // var target_age = false;
+    // var target_gender = false;
+
+    // Same idea with the number of responses and resulting cost
+    // Note that the initial call to updateSummaryTable will auto update these vars
+    var response_price = calculateResponsePrice().toFixed(2);
+    var num_respondents = 0;
+    var num_questions = 0;
+    var num_responses = num_respondents * num_questions;
+    var num_responses = 0;
+    var taxes = 0;
+    var cost = response_price * num_responses;
+    var total_cost = cost + taxes;
+    var cost_stripe = total_cost * 100; // Used only for the stripe params
+    
+    updateSummaryTable(); // handle initial values for the form (from session)
+    updateNumQuestions(num_questions); // handle initial display of questions (either from session or to hide all)
+
+    /** 
+      handle initial choice displays
+      we have to do this b/c I use the toggle strategy for the images (like with the targeting checkboxes)
+      instead of setting the images completely from scratch like the summarytable and numquestions use
+      it's just a trade-off of more code here vs. more code in the function
+    **/
+    $(".question-form").each(function(index, el){
+      $question = $(el);
+      // could also use session var, but this is simpler code
+      if ($question.find(".checkbox").prop("checked")){
+        $question.find(".choice-form").slice(<%= Question.max_num_images %>).hide(); // show only first two choices (and default show images)
+      }
+      else{
+        $question.find(".choice-form").slice(0,<%= Question.max_num_images %>).each(function(){
+          $(this).find(".choice-image-form").hide(); // hide images (and default all choices) 
+        });
+      }
+    });
+
+    // Listens for changes in fields after page load and calls updateSummaryTable
+    // Again, note that targeting changes are taken care of in _targeting_info
+    $("#number_questions, #number_respondents, #target_categories_checkbox, #tax_state").change(function(){
+      updateSummaryTable();
+    });
+
+    // same, but for display/hiding questions and their choices
+    $("#number_questions").change(function(){
+      updateNumQuestions();
+    });
+
+    // same, but for the page selector
+    $(".campaign-form-page-selector input[name='page']").change(function(event){
+      $(".campaign-form-page").slideUp();
+      $("#campaign-form-page-"+$(this).val()).slideDown();
+      $("#label-campaign, #label-questions, #label-summary").removeClass('selected');
+      $("#label-"+$(this).val()).addClass('selected');
+    });
+    // note that similar things are triggered by onClicks for demographic targeting and image checkboxes
+
+    // Handle the initial blinking of form being prepared by hiding first
+    // (see end of hellotoken stylesheet to see where initial hide happens)
+    // Use page:change as well instead of only ready b/c of turbolinks
+    var ready = function() {
+      $(".campaign-form-page-selector").show();
+      // $("#campaign-form").slideDown(600); // use this to show whole form
+      $("#campaign-form-page-campaign").slideDown(800); // use this to show only campaign page
+      // also have to change stylesheet accordingly
+    };
+
+    $(document).ready(ready);
+    $(document).on('page:load', ready);
+
+    // save the form on exit
+    // use "submitted" flag to not do this on submit
+    var submitted = false;
+    window.onbeforeunload = function(){
+      // for some inane reason, the session isn't being stored right in rails
+      // var params = $("#campaign-form").serialize();
+      // $.ajax({
+      //   url: "/save_campaign",
+      //   data: params,
+      //   method: "POST",
+      // });
+      // this is the grudging alternative
+      if (!submitted)
+        return 'Your progress will be lost.';
+    };
+
+    /**
+    FUNCTIONS
+    **/
+
+    // Update the table of cost on the summary page
+    // Relies on static, global variables
+    function updateSummaryTable() {
+      // Update variables
+      // Note that the targeting variables are already updated by toggleDiv in _targeting_info
+      response_price = calculateResponsePrice().toFixed(2);
+      num_respondents = $( "#number_respondents" ).val() || 1;
+      num_questions = $('#number_questions').val() || 1;
+      num_responses = num_respondents * num_questions;
+      cost = (response_price * num_responses).toFixed(2);
+      taxes = parseFloat(cost * $('#tax_state').val()).toFixed(2);
+
+      // Calculate total cost (convert each back to float first)
+      total_cost = parseFloat(cost) + parseFloat(taxes);
+      total_cost_stripe = total_cost * 100;
+
+      // Some helper variables for the targeting text (and w/e else might fit here)
+      target_category_text = (target_categories) ? "+ $" + category_price: "";
+      target_gender_text = (target_gender) ? "+ $" + gender_price: "";
+      target_age_text = (target_age) ? "+ $" + age_price: "";
+
+
+      if (target_categories || target_gender || target_age){
+        open_parentheses_text = "(";
+        close_parentheses_text = ")";
+        base_price_text = "$"+ base_price;
+      }
+      else {
+        open_parentheses_text = "";
+        close_parentheses_text = "";
+        base_price_text = "";
+      }
+
+
+      // Update text for various divs
+      $( "#open_parentheses" ).text(open_parentheses_text);
+      $( "#number_respondents_calculation" ).text(num_respondents);
+      $( "#number_questions_calculation" ).text(num_questions);
+      $( "#total_responses_calculation" ).text(num_responses);
+      $( "#total_response_price" ).text(response_price);
+      $( "#base_price" ).text(base_price_text);
+      $( "#category_price" ).text(target_category_text);
+      $( "#gender_price" ).text(target_gender_text);
+      $( "#age_price" ).text(target_age_text);
+      $( "#taxes" ).text("$"+taxes);
+      $( "#cost_calculation" ).text(cost);
+      $( "#close_parentheses" ).text(close_parentheses_text);
+
+      // //Check that campaign is valid
+      // validateCampaign2(total_cost); 
+      /** I moved this to when the user clicks the button since that's the gate
+          for when everything actually needs to be right; I decided not to
+          bother the user until then. Your validateCampaign works on
+          different assumptions, so I copied the function and tweaked it.
+          Reset it if you prefer doing it the other way.
+      **/
+    }
+
+    // Calculate response price
+    // Relies on static, global variables
+    function calculateResponsePrice(){
+      response_price = base_price;
+
+      if (target_categories)
+        response_price += category_price;
+      if (target_gender) 
+        response_price += gender_price; 
+      if (target_age)
+      	response_price += age_price;
+
+      return response_price;
+    }
+
+    // Update the number of questions to fill out in the questions page
+    function updateNumQuestions(x){
+      // allow for passing an argument or retrieving from text
+      if (x === undefined){
+        // a little sloppy to set the value here again (in addition to updateSummary), but I'm being fast
+        num_questions = $('#number_questions').val() || 0;
+      }
+      else{
+        num_questions = x;
+      }
+
+      $questions = $(".question-form");
+      $questions.each(function(index,el){
+        var question = $(el);
+        // +1 since num_questions is 1-indexed, but element ids/jquery indices are 0-indexed
+        // should we hide this set of questions?
+        if (index + 1 > num_questions){
+          question.slideUp();
+          // this part is a huge pain, which is why I recommend not doing it
+          // and updating validateCampaign() instead
+          // $question_text = question.find('#campaign_questions_attributes_'+index+'_text'); // name auto-given by rails form builder
+          // $question_text.prop('required', false);
+          // $first_choice_text = question.find('#campaign_questions_attributes_'+index+'_choices_attributes_0_text');
+          // $first_choice_text.prop('required', false);
+        }
+        // or show it?
+        else{
+          question.slideDown();
+          // $question_text = question.find('#campaign_questions_attributes_'+index+'_text'); // name auto-given by rails form builder
+          // $question_text.prop('required', true);
+          // $first_choice_text = question.find('#campaign_questions_attributes_'+index+'_choices_attributes_0_text');
+          // $first_choice_text.prop('required', true);
+        }
+      });
+    }
+
+    // Validate orders. For now, only checks order amount minimum
+    // If user enters negative value or non-numerical value, reset to 1 and try again
+    // Relies on static, global variables
+    function validateCampaign(){
+      var validation_text = "";
+      var minimum_order_amount = <%= Campaign.min_order_cost %>;
+      var max_num_questions = <%= Campaign.max_num_questions %>;
+      // iterate through selected questions and check for fill
+      // theoretically, user could have more inputs than selected number
+      // but I check for that in server-side
+      // there's also better code to do this iteration, but it's okay for now
+      var any_questions_blank = false;
+      var any_questions_too_long = false;
+      for (var i = 0; i < num_questions; i++){
+        var question_text = $("#campaign_questions_attributes_"+i+'_text').val();
+        if (question_text == ""){
+          any_questions_blank = true;
+          break;
+        }
+        if (question_text.length > 250){
+          any_questions_too_long = true;
+          break;
+        }
+      }
+      // Now do something similar for choices and images
+      var at_least_one_choice_per_question = true;
+      var any_choices_too_long = false;
+      var at_least_one_image_per_question = true;
+      for (var i = 0; i < num_questions; i++){
+        $question = $("#question-form-"+i);
+        $choices = $question.find(".choice-form input:text");
+        var at_least_one_choice_this_question = false;
+        $choices.each(function(index, el){
+          var choice_text = $(el).val();
+          if (choice_text.length > 50){
+            any_choices_too_long = true;
+            return;
+          }
+          else if (choice_text.length > 0){
+            at_least_one_choice_this_question = true;
+            return;
+          }
+        });
+        // and then one last check for images
+        var at_least_one_image_this_question = true;
+        if ($question.find(".checkbox").prop("checked")){
+          at_least_one_image_this_question = false;
+          $question.find("img").each(function(index, el){
+            if ($(el).attr("src") != ""){
+              at_least_one_image_this_question = true;
+            }
+          });
+        }
+
+        if (any_choices_too_long){
+          break;
+        }
+        else if (!at_least_one_choice_this_question){
+          at_least_one_choice_per_question = false;
+          break;
+        }
+        else if (!at_least_one_image_this_question){
+          at_least_one_image_per_question = false;
+          break;          
+        }
+
+      }
+
+      if (cost < minimum_order_amount) {
+        validation_text = "Your order is below the minimum $"+minimum_order_amount.toFixed(2)+".";
+      }
+      else if (num_questions > max_num_questions){
+        validation_text = "You can have a maximum of "+max_num_questions+" questions in a campaign.";
+      }
+      else if (num_questions < 1){
+        validation_text = "You need to have a positive number of questions.";
+      }
+      else if ($("#campaign_title").val() == ""){
+        validation_text = "You need to provide a campaign title.";
+      }
+      else if ($("#campaign_title").val().length > 30){
+        validation_text = "Your campaign title length is too long (max is 30 characters).";
+      }
+      else if (any_questions_blank){
+        validation_text = "You need to fill in question text for all of your purchased questions."
+      }
+      else if (any_questions_too_long){
+        validation_text = "Your question texts all need to be less than 250 characters long."
+      }
+      else if (!at_least_one_choice_per_question){
+        validation_text = "Every question needs to have at least one answer provided for it."
+      }
+      else if (any_questions_too_long){
+        validation_text = "Your answer texts all need to be less than 50 characters long."
+      }
+      else if (!at_least_one_image_per_question){
+        validation_text = "You selected to use images for a question but did not provide any images."
+      }
+      /**
+      If anything else to check, add here,
+      like the below examples. 
+
+      My opinion is to get rid of the HTML5 validations and add more stuff here;
+      it means every time we add a new kind of field, we only have to 
+      check/not check for the new requirements here, instead of disabling the
+      required/whatever in the question toggle function.
+
+      I've gone ahead and done that for now; you should finalize it and then delete validateCampaign2.
+
+      else if (A){
+      }
+      else if (B){
+      }
+      **/
+      if (validation_text !== ""){
+        $( "#campaign_alert" ).text(validation_text)
+                              .css({'font-size' : '14px',
+                                    'color' : 'red',
+                                    'font-weight': 'bold'
+                                   })
+                              .slideDown();
+        $("#campaign_alert").fadeOut(100).fadeIn(200); // flash text so user knows it's a new error if text is same
+        return false;
+      }
+      return true; 
+    }
+
+    // Validate orders. For now, only checks order amount minimum
+    // If user enters negative value or non-numerical value, reset to 1 and try again
+    function validateCampaign2(cost) {
+      minimum_order_amount = <%= Campaign.min_order_cost %>;
+
+      if (cost <= 0) {
+        $( "#number_respondents" ).val(1);
+        updateSummaryTable();
+      } else if (cost < minimum_order_amount) {
+        $( "#campaign_alert" ).text("Your order is below the minimum $"+minimum_order_amount.toFixed(2)+".")
+                              .css({'font-size' : '14px',
+                                    'color' : 'red',
+                                    'font-weight': 'bold'
+                                   })
+                              .slideDown();
+        $( "#campaign_submit_button" ).prop('disabled', true).addClass('disabled');
+      } else {
+        $( "#campaign_alert" ).slideUp();
+        $( "#campaign_submit_button" ).prop('disabled', false).removeClass('disabled');
+      }
+    }
+
+    // Update the images displayed below the choices
+    function loadFile(event,selector) {
+      var output = document.getElementById(selector);
+      var img_cached_file = event.target.files[0];
+      if (img_cached_file != undefined){
+        output.src = URL.createObjectURL(img_cached_file);
+      }
+      else{
+        // Unlike in profile editing page, just display blank image
+        output.src = ""
+      }
+    };
+
+    // Toggle a question for image answers (2 choices w/ images) 
+    // or regular (5 choices w/o images)
+    function toggleImageUpload(question_index){
+      $question = $("#question-form-"+question_index);
+      $choices = $question.find(".choice-form");
+      $choices.each(function(index,el){
+        $choice = $(el);
+        // For choices above two toggle entire choice
+        if (index > 1){
+          $choice.toggle("slow");
+        }
+        // Otherwise, toggle just the file upload
+        else{
+          $choice.find(".choice-image-form").toggle("slow");
+        }
+      });
+    }
+
+    /**
+    STRIPE
+    **/
+
+    // <!--For some reason it matters that this comes last...? 
+    //     Probably b/c of the form tag.
+    //     So don't change the script position.
+    // -->
+
+    // The rest of this script is for Stripe and form submission
+    var handler = StripeCheckout.configure({
+      key: "<%=Rails.configuration.stripe[:publishable_key]%>",
+      label: "Proceed to payment",
+      image: "/images/ht_logo_small.png", // meh, just let it use the public image
+      name: 'hellotoken',
+      description: 'Your campaign',
+      amount: total_cost_stripe,
+      // store the token received from stripe and trigger form submit
+      token: function(token){
+        submitted = true;
+        var tokenInput = $("<input type=hidden name=stripeToken />").val(token.id);
+        var emailInput = $("<input type=hidden name=stripeEmail />").val(token.email);
+        $("#campaign-form").append(tokenInput).append(emailInput).submit();
+      }
+    });
+    
+    // Close Checkout on page navigation
+    $(window).on('popstate', function() {
+      handler.close();
+    });
+
+    // Had trouble earlier when this was using onclick for the button
+    // instead of onsubmit--this fixes those problems, since now HTML5
+    // validations run first
+    $('#campaign-form').on('submit', function(e){
+      e.preventDefault();
+      if (validateCampaign()){ // I recommend adding to this function and removing the HTML5 validations
+        handler.open({
+          amount: total_cost_stripe
+        });
+      }
+      else {
+        return false;
+      }    
+    });
+
+
+</script>

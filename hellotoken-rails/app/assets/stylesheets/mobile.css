@@ -1,0 +1,186 @@
+/* ----- Mobile ----- */
+
+body {
+  margin: 0;
+  
+}
+
+html{
+    -webkit-text-size-adjust:100%;
+    overflow-y:scroll;
+}
+
+#ht-dialog {
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    width: 100%;
+    /* min-width: 315px; */
+    height: 100%;
+    min-height: 0px;
+    border-radius: 0px;
+    position: absolute;
+    overflow: auto;
+    margin-left: 0px;
+    margin-top: 0px;
+}
+
+input[type="button"]{
+    -webkit-appearance: button;
+}
+
+html, body, div, span{
+    font-size: 100%;
+    font-style: inherit;
+    font-weight: inherit;
+    margin: 0;
+    outline: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+
+#ht-dialog > .ht-relativeWrap {
+    padding: 0;
+}
+
+#ht-dialog .ht-relativeWrap > .close {
+    top: 12px;
+}
+
+#ht-dialog .ht-content > h4 {
+    font-size: 12px;
+    text-align: center;
+
+    margin-top: 0px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid black;
+
+    box-shadow: 0px 0px 2px black;
+}
+
+#ht-dialog .ht-content .ht-header {
+    padding: 25px 0;
+}
+
+#ht-dialog .ht-header .ht-logo {
+    margin-bottom: 20px;
+}
+
+#ht-dialog .ht-content .ht-heading {
+    padding: 0 20px;
+
+    font-size: 15px;
+}
+
+#ht-dialog .ht-content .ht-subtitle {
+    font-size: 10px;
+}
+
+#ht-dialog .ht-content > .ht-purchaseOptions {
+    padding: 10px 20px;
+}
+
+#ht-dialog .ht-purchaseOptions > .ht-purchaseOption {
+    margin: 0;
+
+    width: auto;
+    float: none;
+
+    background-size: 20px 20px;
+    background-position: 25px 20px;
+
+    text-align: left;
+
+    padding: 3px 0 1px 0;
+
+    margin: 0 0 5px 0;
+}
+
+#ht-dialog .ht-icon.medium {
+    display: none;
+}
+
+#ht-dialog .ht-purchaseOption > h5 {
+    padding: 0px 0 0 60px;
+    margin-top: 10px;
+}
+
+#ht-dialog .ht-purchaseOption > .ht-purchaseDesc {
+    padding: 0px 0 0 60px;
+    margin-bottom: 0;
+}
+
+#ht-dialog .ht-purchaseOption .ht-buyLink {
+    text-decoration: none;
+}
+
+#ht-dialog .ht-purchaseOption .ht-button.orange {
+    margin: 10px 15px 15px 15px;
+    display: block;
+    width: auto;
+
+    text-align: center;
+    padding: 10px;
+}
+
+
+/* ----- Small Thank you ----- */
+
+#ht-dialog .ht-thankYou > h4 {
+    background-position: 9px 21px;
+    padding: 20px 30px 20px 62px;
+
+    font-size: 16px;
+    text-align: left;
+
+    line-height: 1.5 !important;
+}
+
+#ht-dialog .ht-thankYou > p {
+    padding: 14px;
+    font-size: 13px;
+    line-height: 1.7 !important;
+}
+
+#ht-dialog .ht-iframe .ht-iframe-overflow {
+    width: 100%;
+    max-width: 340px;
+    overflow: hidden;
+    height: 195px;
+    margin: auto auto;
+    display: none;
+}
+
+#ht-dialog .ht-iframe #ht-iframe {
+    max-width: none;
+}
+
+#ht-dialog div.ht-tweet-link {
+    width: auto;
+    margin-top: 5px;
+    text-align: center;
+    height: 20px;
+}
+
+#ht-dialog .ht-iframe div.ht-paypal-link, #ht-dialog .ht-iframe div.ht-tweet-link {
+    width: auto;
+    margin-top: 10px;
+    text-align: center;
+    height: auto;
+}
+
+#ht-dialog .ht-iframe div.htHelpLine {
+    margin-bottom: 20px;
+}
+
+#ht-dialog .ht-payment-area {
+    margin-top: 30px;
+}
+
+#ht-dialog .ht-bitpay-alternative {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    display: block;
+}

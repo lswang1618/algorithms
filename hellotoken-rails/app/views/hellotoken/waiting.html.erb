@@ -1,0 +1,24 @@
+<%= render 'layouts/logo' %>
+<div class="row">
+  <div class="small-12 columns">
+    <h2>
+      <%="Thanks for confirming your account!" %>
+    </h2>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 columns">
+      <p> To better fit your needs, we’ll personally be in touch with you via email to get you on the platform. Feel free to <%= mail_to "suppot@hellotoken.com", "email us" %> directly if you have any questions.
+      </p>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="small-12 columns">
+    <%= link_to "Facebook Page", "https://www.facebook.com/thehellotoken?fref=ts", class: "yellow-button" %>
+    <%= link_to "Return Home", root_path, class: "yellow-button" %>
+  </div>
+</div>
+
+
+

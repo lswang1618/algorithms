@@ -1,0 +1,5 @@
+<% if params[:resource] == "researcher" %>
+  $('#admin-table-researchers').replaceWith('<%= escape_javascript render("researchers/table", researchers:@researchers) %>');
+<% elsif params[:resource] == "publisher" %>
+  $('#admin-table-publishers').replaceWith('<%= escape_javascript render("publishers/table", publishers:@publishers) %>');
+<% end %>

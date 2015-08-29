@@ -1,0 +1,20 @@
+<h2>Choice Info</h2>
+<% @use_pagination = false %>
+<%= render 'table', choices: Array.wrap(@choice) %>
+
+<h2>Responses</h2>
+<% @use_pagination = true %>
+<% @query = {
+  controller: 'responses',
+  action: 'index',
+  choice: {
+    choice_id: @choice.id
+    }
+  } %>
+<%= render 'responses/table', responses: @choice.responses.order('responses.created_at desc').page.per(10) %>
+
+<%#= link_to 'Edit', edit_choice_path(@choice) %> |
+<%= link_to "Question", @choice.question %> | 
+<%= link_to "Researcher", @choice.question.researcher %> |
+<%= link_to "All Researchers", researchers_path %> | 
+<%= link_to 'Admin home', admin_path %>

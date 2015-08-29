@@ -1,0 +1,28 @@
+<div class="row" style="padding-top: 30px">
+  <div class="large-9 large-centered columns">
+    <div id="token-container" style="margin-left:0">
+    <div id="dummy-1"></div>
+    <div id="htoken"><span id="H">H</span></div>
+  </div>
+    <h2 id = "thanks">
+      <%= "Thanks for your purchase!" %>
+    </h2>
+    You successfully paid for your questions at a total cost of <%= number_to_currency(@campaign.cost + @campaign.taxes) %>.
+    <!--Now that the receipt isn't a separate page, we can 
+        actually show details of the campaign created.
+        My recommendation is to make a partial,
+        or to modify the show.html.erb file,
+        and then just render it here (since that
+        will make it easier to use show again later)
+      -->
+    <!-- The following campaign was created: -->
+    <%# render partial: @campaign (approx. the command to use)%>
+  </div>
+</div>
+<div class="row">
+  <div class="large-9 large-centered columns">
+    <p> View responses on your <a href= <%= dashboard_path %>>Dashboard</a></p>
+    <a href = <%= new_campaign_path %> id = "thanks"><button class = "yellow-button">Create Another Campaign</button></a>
+    <a href = <%= dashboard_path %> id="thanks"><button class = "yellow-button">Return to Dashboard</button></a></br>
+  </div>
+</div>

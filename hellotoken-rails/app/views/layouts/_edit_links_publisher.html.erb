@@ -1,0 +1,31 @@
+<div class="row small-margin-top">
+  <div class="small-12 medium-12 large-12 columns">
+    <h3>Getting started</h3>
+  </div>
+</div>
+
+<!-- Plugin download -->
+<% if current_publisher.verified? %> <!-- Should be a helper.. -->
+  <div class="row">
+    <div class="small-12 columns">
+      <div class="field-text">
+        Download the plugin: <%= link_to "hellotoken", plugin_path %>.
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-12 columns">
+      <div class="field-text">
+        Read our setup guide: <%= link_to "tutorial", "http://blog.hellotoken.com/?p=26", target: "_blank" %>.
+      </div>
+    </div>
+  </div>
+<% else %>
+  <div class="row">
+    <div class="small-12 columns">
+      <div class="field-text">
+        You can download our wordpress plugin here once your account is verified.
+      </div>
+    </div>
+  </div>
+<% end %>

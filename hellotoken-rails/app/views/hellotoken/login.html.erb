@@ -1,0 +1,11 @@
+<% content_for :title, "Log in to your account" %>
+
+<div id="page">
+	<% @type = "researcher" %>
+	<%#= render 'researchers/sessions/new' %>
+	<%= render :partial => "layouts/session_new" , :locals => {:title => "Researcher" } %>
+
+	<% @type = "publisher" %>
+	<%#= render 'publishers/sessions/new' %>
+	<%= render :partial => "layouts/session_new" , :locals => {:title => "Publisher" } %>
+</div>

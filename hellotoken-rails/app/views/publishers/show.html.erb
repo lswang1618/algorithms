@@ -1,0 +1,19 @@
+<h2>User Info</h2>
+<% @use_pagination = false %>
+<%= render 'table', publishers: Array.wrap(@publisher) %>
+
+<% @use_pagination = true %>
+<% @query = {
+  controller: 'articles',
+  action: 'index',
+  article: {
+    publisher_id: @publisher.id
+    }
+  } %>
+<h2>Articles</h2>
+<%= render 'articles/table', articles: @publisher.articles.includes(:responses).order("articles.updated_at desc").page.per(10) %>
+
+
+<%= link_to 'Edit', edit_publisher_path(@publisher) %> |
+<%= link_to 'All publishers', publishers_path %> | <%= link_to 'Admin home', admin_path %>
+

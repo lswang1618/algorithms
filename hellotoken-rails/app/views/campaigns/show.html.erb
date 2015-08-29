@@ -1,0 +1,10 @@
+<h2>Campaign Info</h2>
+<% @use_pagination = false %>
+<%= render 'table', campaigns: Array.wrap(@campaign) %>
+
+<h2>Questions</h2>
+<%= render 'questions/table', questions: @campaign.questions %>
+
+<%= link_to 'Edit', edit_campaign_path(@campaign) %> |
+<%= link_to "Researcher", @campaign.researcher %> |
+<%= link_to 'All campaigns', campaigns_path %> 

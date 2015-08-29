@@ -1,0 +1,25 @@
+<%= link_to "Logs", "/logs" %> | 
+<%= link_to "Researchers", researchers_path %> | 
+<%= link_to "Publishers", publishers_path %> |
+<%= link_to "Campaigns", campaigns_path %> |
+<%= link_to "Questions", questions_path %> |
+<%= link_to "Choices", choices_path %> |
+<%= link_to "Readers", readers_path %> |
+<%= link_to "Responses", responses_path %>
+
+<a href="<%=researchers_path%>"><h2>
+  Researchers
+</h2></a>
+<% @use_pagination = true %>
+<% @query = {
+  resource: "researcher"
+  } %>
+<%= render "researchers/table", researchers:@researchers, admin_homepage:true %>
+
+<a href="<%=publishers_path%>"><h2>
+  Publishers
+</h2></a>
+<% @query = {
+  resource: "publisher"
+  } %>
+<%= render "publishers/table", publishers:@publishers, admin_homepage:true %>

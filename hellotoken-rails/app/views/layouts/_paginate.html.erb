@@ -1,0 +1,10 @@
+<% if (@use_pagination.nil? or @use_pagination) # so by default and when explicitly set %>  
+  <div class="paginate-navbar">
+    <%#= paginate choices (the default theme) %>
+    <%= paginate resources, theme: 'foundation', remote: true, params: (@query||{}) %>
+  </div>
+
+  <div class="paginate-info">
+    <%= page_entries_info resources %>
+  </div>
+<% end %>

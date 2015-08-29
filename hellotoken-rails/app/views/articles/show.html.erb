@@ -1,0 +1,20 @@
+<h2>User Info</h2>
+<% @use_pagination = false %>
+<%= render 'table', articles: Array.wrap(@article) %>
+
+<% @use_pagination = true %>
+<% @query = {
+  controller: 'responses',
+  action: 'index',
+  response: {
+    article_id: @article.id
+    }
+  } %>
+<h2>Responses</h2>
+<%= render 'responses/table', responses: @article.responses.order('responses.created_at desc').page.per(10) %>
+
+<%#= link_to 'Edit', edit_publisher_path(@publisher) %> |
+<%= link_to 'All articles', readers_path %> | 
+<%= link_to 'Publisher', readers_path %> | 
+<%= link_to 'Admin home', admin_path %>
+

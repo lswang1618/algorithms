@@ -1,0 +1,41 @@
+<div id="ht-dialog">
+    <div class="ht-relativeWrap">
+        <div class="close EIEO"></div>
+        <div class="ht-content">
+            <div class="ht-header">
+                <div id="ht-token-container-popup">
+                    <% if @publisher.logo.present? or @publisher.logo.url.include? "HPR-HT"%>
+                        <div id="ht-bounce-1"></div> <!-- Used for bouncing animation -->
+                    <% end %>
+                    <div class="ht-logo-small">
+                        <%= image_tag @publisher.logo.url(:icon), id: "ht-logo-image"%>
+                        <script>
+                            $("#ht-logo-image").load($(this).attr("href"),function(){
+                                // resize containers for centering and appropriate margin sizing
+                                var width   = $("#ht-logo-image")[0].naturalWidth,
+                                    height  = $("#ht-logo-image")[0].naturalHeight;
+                                $("#ht-tok  en-container-popup").css('width', width+"px");
+                                $(".ht-logo-small").css('width', width+"px");
+                                $("#ht-token-container-popup").css('height', (height+20)+"px"); // +20 for padding--should be done in stylesheet
+                                $(".ht-logo-small").css('height', height+"px");
+                            });
+                        </script>   
+                    </div>
+                </div>
+                <p class="ht-heading">Click an Answer to Continue Reading</p>
+                <p class="ht-subtitle buyPass">
+                    For every question answered, we donate to this blog! </p>
+            </div>
+            <%= form_tag '/popup/submit', class: 'htQuestion' do -%>
+                <%= generateFormHtml(@question,@article,@reader,@publisher,@full_article_url) %>
+            <% end %>
+            <br/>
+        </div>
+    </div>
+    <%= render 'sponsor_footer', researcher: @researcher%>
+</div>
+
+<%= postMessage(getMessage(@question,@reader,@publisher)) %>
+
+
+

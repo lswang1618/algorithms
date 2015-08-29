@@ -1,0 +1,20 @@
+<div class="admin-table" id="admin-table-choices">
+  <%= render "layouts/paginate", resources: choices %>
+  
+  <table>
+    <tr>
+      <th>Text</th>
+      <th>Question</th>
+      <th>% Chosen</th>
+      <th>Num Responses</th>
+    </tr>
+    <% choices.each do |choice| %>
+      <tr>
+        <td><%= link_to choice.text, choice %></td>
+        <td><%= link_to choice.question.text, choice.question %></td>
+        <td><%= number_with_precision(choice.percent_of_answers, precision: 2) %></td>
+        <td><%= choice.responses.size %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>

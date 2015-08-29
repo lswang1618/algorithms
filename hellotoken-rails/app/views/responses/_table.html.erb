@@ -1,0 +1,83 @@
+<div class="admin-table" id="admin-table-responses">
+  
+  <!--
+  <%= form_tag responses_path, method: "GET", remote: true do -%>
+    <%# nest the search form %>
+    <h3> Filter Results </h3>
+    <%= fields_for :response do |f| %>
+    <p>
+        <%= f.label :text %>
+        <%= f.text_field :text %>
+    </p>
+    <p>
+        <%= f.label :choice_id, "Choice (Hold CTRL and click to select multiple)" %>
+        <%= f.select :choice_id, Choice.pluck(:text,:id), {prompt: "Any"}, {multiple: true, style: "height:100px"} %>
+    </p>
+    <p>
+        <%= f.label :question_id, "Question (Hold CTRL and click to select multiple)" %>
+        <%= f.select :question_id, Question.pluck(:text,:id), {prompt: "Any"}, {multiple: true, style: "height:100px"} %>
+    </p>
+    <p>
+        <%= f.label :article_id, "Article (Hold CTRL and click to select multiple)" %>
+        <%= f.select :article_id, Article.pluck(:url,:id), {prompt: "Any"}, {multiple: true, style: "height:100px"} %>
+    </p>
+    <% end %>
+    <%= submit_tag "Filter", class: "button" %>
+  <% end %>
+  -->
+  <% @q ||= responses.ransack %>
+
+  <%= search_form_for @q, remote: true do |f| %>
+    <%# All these similar select tags should be in helpers %>
+    <p>
+      <%= f.label :text_cont %>
+      <%= f.search_field :text_cont %>
+    </p>
+    <p>
+      <%= f.label :reader_gender_in, "Reader Gender (Hold CTRL and click to select multiple)" %>
+      <%= f.select :reader_gender_in, Reader.get_demographic_options["gender"], {include_blank: "Any"}, {multiple: true, style: "height:100px"} %>
+    </p>
+    <p>
+      <%= f.label :choice_id_in, "Choice (Hold CTRL and click to select multiple)" %>
+      <%= f.select :choice_id_in, Choice.pluck(:text,:id), {include_blank: "Any"}, {multiple: true, style: "height:100px"} %>
+    </p>
+    <p>
+      <%= f.label :question_id_in, "Question (Hold CTRL and click to select multiple)" %>
+      <%= f.select :question_id_in, Question.pluck(:text,:id), {include_blank: "Any"}, {multiple: true, style: "height:100px"} %>
+    </p>
+    <p>
+      <%= f.label :article_id_in, "Article (Hold CTRL and click to select multiple)" %>
+      <%= f.select :article_id_in, Article.pluck(:url,:id), {include_blank: "Any"}, {multiple: true, style: "height:100px"} %>
+    </p>
+    <%= f.submit %>
+  <% end %>
+
+  <%= render "layouts/paginate", resources: responses %>
+
+  <table>
+    <tr>
+      <th>Choice</th>
+      <th>Question</th>
+      <th>Article</th>
+      <th>Article (Referred URL)</th>
+      <th><%= sort_link @q, :created_at, @query, {remote: true} %></th>
+      <th><%= sort_link @q, :reader_id, {}, {remote: true} %></th>
+      <th><%= sort_link @q, :reader_gender, {}, {remote: true} %></th>
+      <th>Age</th>
+      <th>Country</th>
+    </tr>
+    <% responses.each do |response| %>
+      <tr>
+        <td><%= (response.choice_id.present? ? link_to(response.text, response.choice) : response.text) %></td>
+        <td><%= link_to response.question.text, response.question %></td>
+        <td><%= (response.article_id.present? ? link_to(response.article.url, "http://"+response.article.url, target: "_blank") + "--" + link_to("[article in db]", response.article) : "none" ) %></td>
+        <td><%= response.full_url.present? ? (link_to response.full_url, response.full_url) : "none" %></td>
+        <td><%= response.created_at %></td>
+        <td><%= link_to response.reader.id, response.reader %></td>
+        <td><%= response.reader.gender || "unknown" %></td>
+        <td><%= response.reader.age || "unknown"%></td>
+        <td><%= response.reader.country || "unknown" %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>

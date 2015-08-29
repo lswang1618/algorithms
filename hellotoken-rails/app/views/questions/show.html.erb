@@ -1,0 +1,31 @@
+<h2>Question Info</h2>
+<%# table assumes a collection, so fake one %>
+<% @use_pagination = false %>
+<%= render 'table', questions: Array.wrap(@question) %>
+
+<h2>Choices</h2>
+<% @use_pagination = true %>
+<% @query = {
+  controller: 'choices',
+  action: 'index',
+  choice: {
+    question_id: @question.id
+    }
+  } %>
+<%= render 'choices/table', choices: @question.choices.page.per(10) %>
+
+<h2>Responses</h2>
+<% @query = {
+  controller: 'responses',
+  action: 'index',
+  response: {
+    question_id: @question.id
+    }
+  } %>
+<%= render 'responses/table', responses: @question.responses.order('responses.created_at desc').page.per(10) %>
+
+<%= link_to 'Edit', edit_question_path(@question) %> | 
+<%= link_to 'Campaign', @question.campaign %> | 
+<%= link_to "Researcher", @question.researcher %> | 
+<%= link_to "All Researchers", researchers_path %> | 
+<%= link_to 'Admin home', admin_path %>
