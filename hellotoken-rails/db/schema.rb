@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20150819195311) do
     t.integer  "num_responses", limit: 4,   default: 0
   end
 
-  add_index "articles", ["publisher_id"], name: "index_articles_on_publisher_id", using: :btree
+  add_index "articles", ["publisher_id"], name: "index_articles_on_publisher_id"
 
   create_table "artquestions", force: :cascade do |t|
     t.integer  "article_id",  limit: 4
@@ -33,8 +33,8 @@ ActiveRecord::Schema.define(version: 20150819195311) do
     t.datetime "updated_at"
   end
 
-  add_index "artquestions", ["article_id"], name: "index_artquestions_on_article_id", using: :btree
-  add_index "artquestions", ["question_id"], name: "index_artquestions_on_question_id", using: :btree
+  add_index "artquestions", ["article_id"], name: "index_artquestions_on_article_id"
+  add_index "artquestions", ["question_id"], name: "index_artquestions_on_question_id"
 
   create_table "campaigns", force: :cascade do |t|
     t.datetime "created_at",                                                             null: false
@@ -57,15 +57,15 @@ ActiveRecord::Schema.define(version: 20150819195311) do
     t.boolean  "all_publishers",                                         default: false
   end
 
-  add_index "campaigns", ["researcher_id"], name: "index_campaigns_on_researcher_id", using: :btree
+  add_index "campaigns", ["researcher_id"], name: "index_campaigns_on_researcher_id"
 
   create_table "campaigns_categories", id: false, force: :cascade do |t|
     t.integer "campaign_id", limit: 4
     t.integer "category_id", limit: 4
   end
 
-  add_index "campaigns_categories", ["campaign_id"], name: "index_campaigns_categories_on_campaign_id", using: :btree
-  add_index "campaigns_categories", ["category_id"], name: "index_campaigns_categories_on_category_id", using: :btree
+  add_index "campaigns_categories", ["campaign_id"], name: "index_campaigns_categories_on_campaign_id"
+  add_index "campaigns_categories", ["category_id"], name: "index_campaigns_categories_on_category_id"
 
   create_table "categories", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -85,7 +85,7 @@ ActiveRecord::Schema.define(version: 20150819195311) do
     t.integer  "num_responses",      limit: 4,     default: 0
   end
 
-  add_index "choices", ["question_id"], name: "index_choices_on_question_id", using: :btree
+  add_index "choices", ["question_id"], name: "index_choices_on_question_id"
 
   create_table "maxmind_geolite_city_blocks", id: false, force: :cascade do |t|
     t.integer "start_ip_num", limit: 8, null: false
@@ -93,9 +93,9 @@ ActiveRecord::Schema.define(version: 20150819195311) do
     t.integer "loc_id",       limit: 8, null: false
   end
 
-  add_index "maxmind_geolite_city_blocks", ["end_ip_num", "start_ip_num"], name: "index_maxmind_geolite_city_blocks_on_end_ip_num_range", unique: true, using: :btree
-  add_index "maxmind_geolite_city_blocks", ["loc_id"], name: "index_maxmind_geolite_city_blocks_on_loc_id", using: :btree
-  add_index "maxmind_geolite_city_blocks", ["start_ip_num"], name: "index_maxmind_geolite_city_blocks_on_start_ip_num", unique: true, using: :btree
+  add_index "maxmind_geolite_city_blocks", ["end_ip_num", "start_ip_num"], name: "index_maxmind_geolite_city_blocks_on_end_ip_num_range", unique: true
+  add_index "maxmind_geolite_city_blocks", ["loc_id"], name: "index_maxmind_geolite_city_blocks_on_loc_id"
+  add_index "maxmind_geolite_city_blocks", ["start_ip_num"], name: "index_maxmind_geolite_city_blocks_on_start_ip_num", unique: true
 
   create_table "maxmind_geolite_city_location", id: false, force: :cascade do |t|
     t.integer "loc_id",      limit: 8,   null: false
@@ -109,7 +109,7 @@ ActiveRecord::Schema.define(version: 20150819195311) do
     t.integer "area_code",   limit: 4
   end
 
-  add_index "maxmind_geolite_city_location", ["loc_id"], name: "index_maxmind_geolite_city_location_on_loc_id", unique: true, using: :btree
+  add_index "maxmind_geolite_city_location", ["loc_id"], name: "index_maxmind_geolite_city_location_on_loc_id", unique: true
 
   create_table "payouts", force: :cascade do |t|
     t.integer  "publisher_id",    limit: 4
@@ -158,11 +158,11 @@ ActiveRecord::Schema.define(version: 20150819195311) do
     t.boolean  "questions_active",                                            default: true
   end
 
-  add_index "publishers", ["category_id"], name: "index_publishers_on_category_id", using: :btree
-  add_index "publishers", ["confirmation_token"], name: "index_publishers_on_confirmation_token", unique: true, using: :btree
-  add_index "publishers", ["email"], name: "index_publishers_on_email", unique: true, using: :btree
-  add_index "publishers", ["name"], name: "index_publishers_on_name", using: :btree
-  add_index "publishers", ["reset_password_token"], name: "index_publishers_on_reset_password_token", unique: true, using: :btree
+  add_index "publishers", ["category_id"], name: "index_publishers_on_category_id"
+  add_index "publishers", ["confirmation_token"], name: "index_publishers_on_confirmation_token", unique: true
+  add_index "publishers", ["email"], name: "index_publishers_on_email", unique: true
+  add_index "publishers", ["name"], name: "index_publishers_on_name"
+  add_index "publishers", ["reset_password_token"], name: "index_publishers_on_reset_password_token", unique: true
 
   create_table "pubquestions", force: :cascade do |t|
     t.integer  "publisher_id", limit: 4
@@ -171,8 +171,8 @@ ActiveRecord::Schema.define(version: 20150819195311) do
     t.datetime "updated_at"
   end
 
-  add_index "pubquestions", ["publisher_id"], name: "index_pubquestions_on_publisher_id", using: :btree
-  add_index "pubquestions", ["question_id"], name: "index_pubquestions_on_question_id", using: :btree
+  add_index "pubquestions", ["publisher_id"], name: "index_pubquestions_on_publisher_id"
+  add_index "pubquestions", ["question_id"], name: "index_pubquestions_on_question_id"
 
   create_table "questions", force: :cascade do |t|
     t.text     "text",            limit: 65535
@@ -191,7 +191,7 @@ ActiveRecord::Schema.define(version: 20150819195311) do
     t.boolean  "random",                        default: false
   end
 
-  add_index "questions", ["campaign_id"], name: "index_questions_on_campaign_id", using: :btree
+  add_index "questions", ["campaign_id"], name: "index_questions_on_campaign_id"
 
   create_table "readers", force: :cascade do |t|
     t.string   "alpha_id",     limit: 255
@@ -240,10 +240,10 @@ ActiveRecord::Schema.define(version: 20150819195311) do
     t.boolean  "admin",                              default: false
   end
 
-  add_index "researchers", ["confirmation_token"], name: "index_researchers_on_confirmation_token", unique: true, using: :btree
-  add_index "researchers", ["email"], name: "index_researchers_on_email", unique: true, using: :btree
-  add_index "researchers", ["name"], name: "index_researchers_on_name", using: :btree
-  add_index "researchers", ["reset_password_token"], name: "index_researchers_on_reset_password_token", unique: true, using: :btree
+  add_index "researchers", ["confirmation_token"], name: "index_researchers_on_confirmation_token", unique: true
+  add_index "researchers", ["email"], name: "index_researchers_on_email", unique: true
+  add_index "researchers", ["name"], name: "index_researchers_on_name"
+  add_index "researchers", ["reset_password_token"], name: "index_researchers_on_reset_password_token", unique: true
 
   create_table "responses", force: :cascade do |t|
     t.text     "text",        limit: 65535
@@ -256,11 +256,11 @@ ActiveRecord::Schema.define(version: 20150819195311) do
     t.integer  "article_id",  limit: 4
   end
 
-  add_index "responses", ["article_id"], name: "index_responses_on_article_id", using: :btree
-  add_index "responses", ["choice_id"], name: "index_responses_on_choice_id", using: :btree
-  add_index "responses", ["question_id"], name: "index_responses_on_question_id", using: :btree
-  add_index "responses", ["reader_id", "question_id"], name: "index_responses_on_reader_id_and_question_id", using: :btree
-  add_index "responses", ["reader_id"], name: "index_responses_on_reader_id", using: :btree
+  add_index "responses", ["article_id"], name: "index_responses_on_article_id"
+  add_index "responses", ["choice_id"], name: "index_responses_on_choice_id"
+  add_index "responses", ["question_id"], name: "index_responses_on_question_id"
+  add_index "responses", ["reader_id", "question_id"], name: "index_responses_on_reader_id_and_question_id"
+  add_index "responses", ["reader_id"], name: "index_responses_on_reader_id"
 
   create_table "visits", force: :cascade do |t|
     t.integer  "reader_id",  limit: 4
@@ -269,7 +269,7 @@ ActiveRecord::Schema.define(version: 20150819195311) do
     t.datetime "updated_at"
   end
 
-  add_index "visits", ["article_id"], name: "index_visits_on_article_id", using: :btree
-  add_index "visits", ["reader_id"], name: "index_visits_on_reader_id", using: :btree
+  add_index "visits", ["article_id"], name: "index_visits_on_article_id"
+  add_index "visits", ["reader_id"], name: "index_visits_on_reader_id"
 
 end
